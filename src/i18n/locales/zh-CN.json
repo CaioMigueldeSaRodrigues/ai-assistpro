@@ -1,0 +1,132 @@
+{
+  "hero": {
+    "title": "用AI智能客服改变您的服务",
+    "subtitle": "全年无休、自动开发客户、实时数据分析",
+    "ctaPrimary": "立即开始",
+    "ctaSecondary": "观看演示",
+    "badge1": "500+企业信赖之选",
+    "badge2": "99.9%正常运行时间"
+  },
+  "benefits": {
+    "title": "为什么选择我们的AI智能客服？",
+    "item1": {
+      "title": "全天候服务",
+      "description": "即使在非工作时间，您的客户也能得到即时响应"
+    },
+    "item2": {
+      "title": "主动开发客户",
+      "description": "在您休息时自动寻找并筛选优质潜在客户"
+    },
+    "item3": {
+      "title": "实时KPI指标",
+      "description": "通过直观的仪表板追踪所有重要指标"
+    },
+    "item4": {
+      "title": "数据安全合规",
+      "description": "完全符合数据保护法规要求"
+    }
+  },
+  "pricing": {
+    "title": "选择适合您业务的方案",
+    "subtitle": "无隐藏费用，随时可取消",
+    "monthly": "/月",
+    "basic": {
+      "name": "基础版",
+      "price": "¥599",
+      "badge": "入门必备",
+      "feature1": "AI助理智能客服",
+      "feature2": "全天候服务",
+      "feature3": "即时响应",
+      "feature4": "集成WhatsApp、网站和社交媒体",
+      "feature5": "每月最多1000次对话",
+      "feature6": "邮件支持",
+      "feature7": "基础培训",
+      "cta": "订阅基础版"
+    },
+    "pro": {
+      "name": "专业版",
+      "price": "¥1399",
+      "badge": "最受欢迎",
+      "feature1": "包含基础版全部+",
+      "feature2": "主动开发客户AI",
+      "feature3": "自动搜索优质潜在客户",
+      "feature4": "智能个性化沟通",
+      "feature5": "全天候机会创造",
+      "feature6": "每月最多5000次对话",
+      "feature7": "每周开发报告",
+      "feature8": "优先支持（聊天+邮件）",
+      "feature9": "CRM集成（HubSpot、Pipedrive）",
+      "cta": "订阅专业版"
+    },
+    "enterprise": {
+      "name": "企业版",
+      "price": "¥2999",
+      "badge": "完整解决方案",
+      "feature1": "包含专业版全部+",
+      "feature2": "高级KPI仪表板",
+      "feature3": "实时指标",
+      "feature4": "转化率",
+      "feature5": "平均响应时间",
+      "feature6": "NPS和客户满意度",
+      "feature7": "开发投资回报率",
+      "feature8": "无限对话次数",
+      "feature9": "专属成功经理",
+      "feature10": "完整API集成",
+      "feature11": "定制培训",
+      "feature12": "99.9%正常运行时间SLA",
+      "feature13": "全天候技术支持（电话+聊天+邮件）",
+      "cta": "联系专家"
+    }
+  },
+  "howItWorks": {
+    "title": "使用流程",
+    "step1": {
+      "title": "注册",
+      "description": "2分钟填写信息"
+    },
+    "step2": {
+      "title": "个性化",
+      "description": "配置您的智能客服"
+    },
+    "step3": {
+      "title": "集成",
+      "description": "连接您的平台"
+    },
+    "step4": {
+      "title": "激活",
+      "description": "您的客服已开始工作"
+    }
+  },
+  "faq": {
+    "title": "常见问题",
+    "q1": {
+      "question": "AI如何工作？",
+      "answer": "我们的AI使用先进的自然语言模型来理解并回答客户问题，提供情境化和个性化的服务。它从每次互动中持续学习。"
+    },
+    "q2": {
+      "question": "可以随时取消吗？",
+      "answer": "是的！没有最低合约期限。您可以随时通过控制面板取消订阅，无需支付违约金或额外费用。"
+    },
+    "q3": {
+      "question": "实施需要多长时间？",
+      "answer": "基本实施不到24小时。注册后，您将收到配置指南，您的智能客服将很快准备就绪。"
+    },
+    "q4": {
+      "question": "数据安全吗？",
+      "answer": "绝对安全。我们严格遵守数据保护法规，使用端到端加密。您的数据永远不会与第三方共享，您保持完全控制权。"
+    },
+    "q5": {
+      "question": "有语言限制吗？",
+      "answer": "我们的智能客服支持50多种语言，包括葡萄牙语、英语、西班牙语和中文。语言检测是自动的，响应以客户的语言进行。"
+    }
+  },
+  "footer": {
+    "description": "用人工智能改变您的客户服务",
+    "links": {
+      "terms": "使用条款",
+      "privacy": "隐私政策",
+      "contact": "联系我们"
+    },
+    "copyright": "© 2025 AI智能客服平台。保留所有权利。"
+  }
+}

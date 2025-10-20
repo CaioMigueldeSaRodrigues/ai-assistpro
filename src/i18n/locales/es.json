@@ -1,0 +1,132 @@
+{
+  "hero": {
+    "title": "Transforme su Atención al Cliente con Agentes de IA",
+    "subtitle": "Disponible 24/7, prospección automática y KPIs en tiempo real",
+    "ctaPrimary": "Comenzar Ahora",
+    "ctaSecondary": "Ver Demostración",
+    "badge1": "Confiado por 500+ empresas",
+    "badge2": "99.9% de disponibilidad"
+  },
+  "benefits": {
+    "title": "¿Por qué elegir nuestros Agentes de IA?",
+    "item1": {
+      "title": "Atención 24/7",
+      "description": "Sus clientes nunca quedan sin respuesta, incluso fuera del horario comercial"
+    },
+    "item2": {
+      "title": "Prospección Activa",
+      "description": "Busca y califica leads automáticamente mientras duerme"
+    },
+    "item3": {
+      "title": "KPIs en Tiempo Real",
+      "description": "Siga todas las métricas importantes en un panel intuitivo"
+    },
+    "item4": {
+      "title": "Seguridad GDPR",
+      "description": "Cumplimiento total con leyes de protección de datos"
+    }
+  },
+  "pricing": {
+    "title": "Elija el plan ideal para su negocio",
+    "subtitle": "Sin tarifas ocultas. Cancele cuando quiera.",
+    "monthly": "/mes",
+    "basic": {
+      "name": "Básico",
+      "price": "€69",
+      "badge": "Ideal para comenzar",
+      "feature1": "Agente de IA Asistente de Atención",
+      "feature2": "Disponible 24 horas al día, 7 días a la semana",
+      "feature3": "Respuestas instantáneas",
+      "feature4": "Integración WhatsApp, sitio web y redes sociales",
+      "feature5": "Hasta 1.000 conversaciones/mes",
+      "feature6": "Soporte por email",
+      "feature7": "Entrenamiento básico del agente",
+      "cta": "Suscribirse al Básico"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "€159",
+      "badge": "Más Popular",
+      "feature1": "Todo del Básico +",
+      "feature2": "Agente de IA Activo para Prospección",
+      "feature3": "Búsqueda automática de leads calificados",
+      "feature4": "Enfoque inteligente y personalizado",
+      "feature5": "Generación de oportunidades 24/7",
+      "feature6": "Hasta 5.000 conversaciones/mes",
+      "feature7": "Informes semanales de prospección",
+      "feature8": "Soporte prioritario (chat + email)",
+      "feature9": "Integración con CRM (HubSpot, Pipedrive)",
+      "cta": "Suscribirse al Pro"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "€349",
+      "badge": "Solución completa",
+      "feature1": "Todo del Pro +",
+      "feature2": "Panel Avanzado de KPIs",
+      "feature3": "Métricas en tiempo real",
+      "feature4": "Tasa de conversión",
+      "feature5": "Tiempo promedio de respuesta",
+      "feature6": "NPS y satisfacción del cliente",
+      "feature7": "ROI de prospección",
+      "feature8": "Conversaciones ilimitadas",
+      "feature9": "Gerente de éxito dedicado",
+      "feature10": "API completa para integraciones",
+      "feature11": "Entrenamiento personalizado",
+      "feature12": "SLA del 99.9% de disponibilidad",
+      "feature13": "Soporte 24/7 (teléfono + chat + email)",
+      "cta": "Hablar con Especialista"
+    }
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona",
+    "step1": {
+      "title": "Registro",
+      "description": "Complete sus datos en 2 minutos"
+    },
+    "step2": {
+      "title": "Personalización",
+      "description": "Configure el agente con su marca"
+    },
+    "step3": {
+      "title": "Integración",
+      "description": "Conecte con sus plataformas"
+    },
+    "step4": {
+      "title": "Activación",
+      "description": "Su agente ya está trabajando"
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "q1": {
+      "question": "¿Cómo funciona la IA?",
+      "answer": "Nuestra IA utiliza modelos avanzados de lenguaje natural para entender y responder preguntas de los clientes de forma contextual y personalizada. Aprende continuamente de cada interacción."
+    },
+    "q2": {
+      "question": "¿Puedo cancelar en cualquier momento?",
+      "answer": "¡Sí! No hay períodos mínimos de contrato. Puede cancelar su suscripción en cualquier momento a través del panel de control, sin multas ni tarifas adicionales."
+    },
+    "q3": {
+      "question": "¿Cuánto tiempo tarda la implementación?",
+      "answer": "La implementación básica tarda menos de 24 horas. Después del registro, recibirá una guía de configuración y su agente estará listo para comenzar a trabajar rápidamente."
+    },
+    "q4": {
+      "question": "¿Son seguros los datos?",
+      "answer": "Absolutamente. Seguimos rigurosamente el GDPR y utilizamos cifrado de extremo a extremo. Sus datos nunca se comparten con terceros y usted mantiene el control total sobre ellos."
+    },
+    "q5": {
+      "question": "¿Hay límite de idiomas?",
+      "answer": "Nuestros agentes soportan más de 50 idiomas, incluyendo portugués, inglés, español y chino. La detección de idioma es automática y la respuesta ocurre en el idioma del cliente."
+    }
+  },
+  "footer": {
+    "description": "Transforme su atención con Inteligencia Artificial",
+    "links": {
+      "terms": "Términos de Uso",
+      "privacy": "Política de Privacidad",
+      "contact": "Contacto"
+    },
+    "copyright": "© 2025 AI Agents Platform. Todos los derechos reservados."
+  }
+}

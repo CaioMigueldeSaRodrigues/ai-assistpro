@@ -1,0 +1,132 @@
+{
+  "hero": {
+    "title": "Transform Your Customer Service with AI Agents",
+    "subtitle": "Available 24/7, automatic prospecting and real-time KPIs",
+    "ctaPrimary": "Get Started",
+    "ctaSecondary": "Watch Demo",
+    "badge1": "Trusted by 500+ companies",
+    "badge2": "99.9% uptime"
+  },
+  "benefits": {
+    "title": "Why choose our AI Agents?",
+    "item1": {
+      "title": "24/7 Support",
+      "description": "Your customers never go unanswered, even outside business hours"
+    },
+    "item2": {
+      "title": "Active Prospecting",
+      "description": "Automatically finds and qualifies leads while you sleep"
+    },
+    "item3": {
+      "title": "Real-Time KPIs",
+      "description": "Track all important metrics on an intuitive dashboard"
+    },
+    "item4": {
+      "title": "GDPR Security",
+      "description": "Full compliance with data protection laws"
+    }
+  },
+  "pricing": {
+    "title": "Choose the perfect plan for your business",
+    "subtitle": "No hidden fees. Cancel anytime.",
+    "monthly": "/month",
+    "basic": {
+      "name": "Basic",
+      "price": "$79",
+      "badge": "Perfect to start",
+      "feature1": "AI Customer Service Assistant",
+      "feature2": "Available 24/7",
+      "feature3": "Instant responses",
+      "feature4": "WhatsApp, website and social media integration",
+      "feature5": "Up to 1,000 conversations/month",
+      "feature6": "Email support",
+      "feature7": "Basic agent training",
+      "cta": "Subscribe Basic"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "$179",
+      "badge": "Most Popular",
+      "feature1": "Everything in Basic +",
+      "feature2": "Active AI Agent for Prospecting",
+      "feature3": "Automatic qualified lead search",
+      "feature4": "Smart and personalized approach",
+      "feature5": "24/7 opportunity generation",
+      "feature6": "Up to 5,000 conversations/month",
+      "feature7": "Weekly prospecting reports",
+      "feature8": "Priority support (chat + email)",
+      "feature9": "CRM integration (HubSpot, Pipedrive)",
+      "cta": "Subscribe Pro"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "$379",
+      "badge": "Complete solution",
+      "feature1": "Everything in Pro +",
+      "feature2": "Advanced KPI Dashboard",
+      "feature3": "Real-time metrics",
+      "feature4": "Conversion rate",
+      "feature5": "Average response time",
+      "feature6": "NPS and customer satisfaction",
+      "feature7": "Prospecting ROI",
+      "feature8": "Unlimited conversations",
+      "feature9": "Dedicated success manager",
+      "feature10": "Complete API for integrations",
+      "feature11": "Custom training",
+      "feature12": "99.9% uptime SLA",
+      "feature13": "24/7 support (phone + chat + email)",
+      "cta": "Talk to an Expert"
+    }
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "step1": {
+      "title": "Sign Up",
+      "description": "Fill in your details in 2 minutes"
+    },
+    "step2": {
+      "title": "Customization",
+      "description": "Configure your agent with your brand"
+    },
+    "step3": {
+      "title": "Integration",
+      "description": "Connect with your platforms"
+    },
+    "step4": {
+      "title": "Activation",
+      "description": "Your agent is now active"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": {
+      "question": "How does the AI work?",
+      "answer": "Our AI uses advanced natural language models to understand and answer customer questions contextually and personally. It continuously learns from each interaction."
+    },
+    "q2": {
+      "question": "Can I cancel anytime?",
+      "answer": "Yes! There are no minimum contract periods. You can cancel your subscription at any time through the control panel, with no penalties or additional fees."
+    },
+    "q3": {
+      "question": "How long does implementation take?",
+      "answer": "Basic implementation takes less than 24 hours. After registration, you'll receive a setup guide and your agent will be ready to start working quickly."
+    },
+    "q4": {
+      "question": "Is my data secure?",
+      "answer": "Absolutely. We strictly follow GDPR and use end-to-end encryption. Your data is never shared with third parties and you maintain full control over it."
+    },
+    "q5": {
+      "question": "Are there language limits?",
+      "answer": "Our agents support over 50 languages, including Portuguese, English, Spanish and Chinese. Language detection is automatic and responses happen in the customer's language."
+    }
+  },
+  "footer": {
+    "description": "Transform your customer service with Artificial Intelligence",
+    "links": {
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "contact": "Contact"
+    },
+    "copyright": "© 2025 AI Agents Platform. All rights reserved."
+  }
+}
