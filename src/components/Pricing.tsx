@@ -7,6 +7,7 @@ export const Pricing = () => {
 
   const plans = [
     {
+      planId: 'basic' as const,
       name: t("pricing.basic.name"),
       price: t("pricing.basic.price") + t("pricing.monthly"),
       badge: t("pricing.basic.badge"),
@@ -23,6 +24,7 @@ export const Pricing = () => {
       popular: false,
     },
     {
+      planId: 'pro' as const,
       name: t("pricing.pro.name"),
       price: t("pricing.pro.price") + t("pricing.monthly"),
       badge: t("pricing.pro.badge"),
@@ -41,6 +43,7 @@ export const Pricing = () => {
       popular: true,
     },
     {
+      planId: 'enterprise' as const,
       name: t("pricing.enterprise.name"),
       price: t("pricing.enterprise.price") + t("pricing.monthly"),
       badge: t("pricing.enterprise.badge"),
