@@ -1,0 +1,695 @@
+{
+  "name": "AI Agents Platform - Complete Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 1,
+              "triggerAtHour": 6,
+              "triggerAtMinute": 0
+            }
+          ]
+        },
+        "timezone": "America/Sao_Paulo"
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -200,
+        200
+      ],
+      "id": "schedule-trigger",
+      "name": "Daily Lead Capture - 6AM"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"CNAE\": \"{{ $env.CNAE_DEFAULT || '5611201' }}\",\n  \"janela_de_dias\": {{ $env.LEAD_CAPTURE_INTERVAL_DAYS || 7 }},\n  \"uf_filtro\": \"{{ $env.UF_FILTER || '' }}\",\n  \"limite_registros\": {{ $env.LEAD_CAPTURE_LIMIT || 10000 }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        200
+      ],
+      "id": "config-parameters",
+      "name": "Set Lead Capture Config"
+    },
+    {
+      "parameters": {
+        "projectId": {
+          "__rl": true,
+          "value": "{{ $env.GOOGLE_PROJECT_ID }}",
+          "mode": "id"
+        },
+        "sqlQuery": "DECLARE start_date DATE DEFAULT DATE_SUB(CURRENT_DATE('America/Sao_Paulo'), INTERVAL {{ $json.janela_de_dias }} DAY);\nDECLARE end_date   DATE DEFAULT CURRENT_DATE('America/Sao_Paulo');\n\nWITH src AS (\n  SELECT\n    CONCAT(e.cnpj_basico, e.cnpj_ordem, e.cnpj_dv) AS cnpj,\n    SAFE.PARSE_DATE('%Y-%m-%d', CAST(e.data_inicio_atividade AS STRING)) AS data_inicio_atividade,\n    CAST(e.cnae_fiscal_principal AS STRING) AS cnae_fiscal_principal,\n    e.sigla_uf AS uf,\n    m.nome AS municipio,\n    em.razao_social,\n    em.porte AS porte_da_empresa,\n    e.cep, e.ddd_1, e.telefone_1, e.ddd_2, e.telefone_2, e.email,\n    CASE WHEN LENGTH(e.cep) = 8 THEN CONCAT(SUBSTR(e.cep,1,5), '-', SUBSTR(e.cep,6,3)) ELSE e.cep END AS cep_formatado,\n    CASE WHEN e.ddd_1 IS NOT NULL AND e.telefone_1 IS NOT NULL THEN CONCAT('(', e.ddd_1, ') ', e.telefone_1) END AS telefone1_formatado,\n    CASE WHEN e.ddd_2 IS NOT NULL AND e.telefone_2 IS NOT NULL THEN CONCAT('(', e.ddd_2, ') ', e.telefone_2) END AS telefone2_formatado,\n    ARRAY_TO_STRING(\n      ARRAY(\n        SELECT tel FROM UNNEST([\n          CASE WHEN e.ddd_1 IS NOT NULL AND e.telefone_1 IS NOT NULL THEN CONCAT('(', e.ddd_1, ') ', e.telefone_1) ELSE NULL END,\n          CASE WHEN e.ddd_2 IS NOT NULL AND e.telefone_2 IS NOT NULL THEN CONCAT('(', e.ddd_2, ') ', e.telefone_2) ELSE NULL END\n        ]) tel\n        WHERE tel IS NOT NULL\n      ), ' / '\n    ) AS telefones\n  FROM `basedosdados.br_me_cnpj.estabelecimentos` e\n  JOIN `basedosdados.br_me_cnpj.empresas` em USING (cnpj_basico)\n  LEFT JOIN `basedosdados.br_bd_diretorios_brasil.municipio` m ON e.id_municipio = m.id_municipio\n)\nSELECT\n  cnpj,\n  FORMAT_DATE('%Y-%m-%d', data_inicio_atividade) AS data_inicio_atividade,\n  cnae_fiscal_principal, uf, municipio, razao_social, porte_da_empresa,\n  cep, ddd_1, telefone_1, ddd_2, telefone_2, email,\n  cep_formatado, telefone1_formatado, telefone2_formatado, telefones,\n  CURRENT_TIMESTAMP() AS data_captura\nFROM src\nWHERE data_inicio_atividade BETWEEN start_date AND end_date\n  AND cnae_fiscal_principal = '{{ $json.CNAE }}'\n  {{ $json.uf_filtro ? \"AND uf = '\" + $json.uf_filtro + \"'\" : \"\" }}\nORDER BY data_inicio_atividade DESC\nLIMIT {{ $json.limite_registros }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 2.1,
+      "position": [
+        200,
+        200
+      ],
+      "id": "bigquery-leads",
+      "name": "BigQuery - Capture Leads",
+      "credentials": {
+        "googleBigQueryOAuth2Api": {
+          "id": "{{ $env.GOOGLE_BIGQUERY_CREDENTIAL_ID }}",
+          "name": "Google BigQuery API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": "{{ $env.LEAD_CAPTURE_BATCH_SIZE || 300 }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        400,
+        200
+      ],
+      "id": "split-batches",
+      "name": "Split in Batches"
+    },
+    {
+      "parameters": {
+        "amount": "{{ $env.LEAD_CAPTURE_DELAY_SECONDS || 3 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        300
+      ],
+      "id": "wait-between-batches",
+      "name": "Wait Between Batches"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "{{ $env.GOOGLE_SHEETS_ID }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "cnpj"
+          ],
+          "schema": [
+            {
+              "id": "cnpj",
+              "displayName": "cnpj",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_inicio_atividade",
+              "displayName": "data_inicio_atividade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "cnae_fiscal_principal",
+              "displayName": "cnae_fiscal_principal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "uf",
+              "displayName": "uf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "municipio",
+              "displayName": "municipio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "razao_social",
+              "displayName": "razao_social",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "porte_da_empresa",
+              "displayName": "porte_da_empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "cep",
+              "displayName": "cep",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "ddd_1",
+              "displayName": "ddd_1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "telefone_1",
+              "displayName": "telefone_1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "ddd_2",
+              "displayName": "ddd_2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "telefone_2",
+              "displayName": "telefone_2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "cep_formatado",
+              "displayName": "cep_formatado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "telefone1_formatado",
+              "displayName": "telefone1_formatado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "telefone2_formatado",
+              "displayName": "telefone2_formatado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "telefones",
+              "displayName": "telefones",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "data_captura",
+              "displayName": "data_captura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        600,
+        200
+      ],
+      "id": "google-sheets-export",
+      "name": "Export to Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "{{ $env.GOOGLE_SHEETS_CREDENTIAL_ID }}",
+          "name": "Google Sheets API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-subscription",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        400
+      ],
+      "id": "webhook-subscription",
+      "name": "Webhook - New Subscription",
+      "webhookId": "subscription-webhook"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list"
+        },
+        "table": {
+          "__rl": true,
+          "value": "subscriptions",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $json.body.email }}",
+            "name": "={{ $json.body.name }}",
+            "company": "={{ $json.body.company }}",
+            "phone": "={{ $json.body.phone }}",
+            "plan": "={{ $json.body.plan }}",
+            "cnae": "={{ $json.body.cnae }}",
+            "message": "={{ $json.body.message }}",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        400
+      ],
+      "id": "postgres-subscription",
+      "name": "Save Subscription to DB",
+      "credentials": {
+        "postgres": {
+          "id": "{{ $env.POSTGRES_CREDENTIAL_ID }}",
+          "name": "PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-contact",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        600
+      ],
+      "id": "webhook-contact",
+      "name": "Webhook - Contact Form",
+      "webhookId": "contact-webhook"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list"
+        },
+        "table": {
+          "__rl": true,
+          "value": "contacts",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.body.name }}",
+            "email": "={{ $json.body.email }}",
+            "phone": "={{ $json.body.phone }}",
+            "subject": "={{ $json.body.subject }}",
+            "message": "={{ $json.body.message }}",
+            "created_at": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        600
+      ],
+      "id": "postgres-contact",
+      "name": "Save Contact to DB",
+      "credentials": {
+        "postgres": {
+          "id": "{{ $env.POSTGRES_CREDENTIAL_ID }}",
+          "name": "PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "api/kpi/metrics",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        800
+      ],
+      "id": "webhook-kpi",
+      "name": "Webhook - KPI Metrics",
+      "webhookId": "kpi-webhook"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Total subscriptions\nWITH metrics AS (\n  SELECT \n    COUNT(*) as total_leads,\n    COUNT(CASE WHEN DATE(created_at) = CURRENT_DATE THEN 1 END) as leads_today,\n    COUNT(CASE WHEN created_at >= DATE_TRUNC('week', CURRENT_DATE) THEN 1 END) as leads_this_week,\n    COUNT(CASE WHEN created_at >= DATE_TRUNC('month', CURRENT_DATE) THEN 1 END) as leads_this_month\n  FROM subscriptions\n),\nplan_stats AS (\n  SELECT \n    plan,\n    COUNT(*) as count,\n    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) as percentage\n  FROM subscriptions \n  GROUP BY plan\n)\nSELECT \n  m.total_leads,\n  m.leads_today,\n  m.leads_this_week,\n  m.leads_this_month,\n  0.23 as conversion_rate,\n  45 as avg_response_time,\n  127 as active_conversations,\n  4.8 as customer_satisfaction,\n  json_agg(json_build_object('plan', p.plan, 'count', p.count, 'percentage', p.percentage)) as plan_distribution\nFROM metrics m\nCROSS JOIN plan_stats p\nGROUP BY m.total_leads, m.leads_today, m.leads_this_week, m.leads_this_month;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        800
+      ],
+      "id": "postgres-kpi",
+      "name": "Get KPI Metrics",
+      "credentials": {
+        "postgres": {
+          "id": "{{ $env.POSTGRES_CREDENTIAL_ID }}",
+          "name": "PostgreSQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        400
+      ],
+      "id": "respond-subscription",
+      "name": "Respond - Subscription"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        600
+      ],
+      "id": "respond-contact",
+      "name": "Respond - Contact"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        800
+      ],
+      "id": "respond-kpi",
+      "name": "Respond - KPI"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-manual-trigger",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -200,
+        0
+      ],
+      "id": "webhook-manual-trigger",
+      "name": "Webhook - Manual Trigger",
+      "webhookId": "manual-trigger-webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"message\": \"Lead capture job triggered\",\n  \"status\": \"processing\",\n  \"timestamp\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        600,
+        0
+      ],
+      "id": "respond-manual-trigger",
+      "name": "Respond - Manual Trigger"
+    }
+  ],
+  "connections": {
+    "Daily Lead Capture - 6AM": {
+      "main": [
+        [
+          {
+            "node": "Set Lead Capture Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Lead Capture Config": {
+      "main": [
+        [
+          {
+            "node": "BigQuery - Capture Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BigQuery - Capture Leads": {
+      "main": [
+        [
+          {
+            "node": "Split in Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split in Batches": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Export to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Wait Between Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Between Batches": {
+      "main": [
+        [
+          {
+            "node": "Split in Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - New Subscription": {
+      "main": [
+        [
+          {
+            "node": "Save Subscription to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Subscription to DB": {
+      "main": [
+        [
+          {
+            "node": "Respond - Subscription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Contact Form": {
+      "main": [
+        [
+          {
+            "node": "Save Contact to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Contact to DB": {
+      "main": [
+        [
+          {
+            "node": "Respond - Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - KPI Metrics": {
+      "main": [
+        [
+          {
+            "node": "Get KPI Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get KPI Metrics": {
+      "main": [
+        [
+          {
+            "node": "Respond - KPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Lead Capture Config",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond - Manual Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-01-21T12:00:00.000Z",
+      "updatedAt": "2025-01-21T12:00:00.000Z",
+      "id": "ai-agents",
+      "name": "AI Agents Platform"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-21T12:00:00.000Z",
+  "versionId": "1"
+}

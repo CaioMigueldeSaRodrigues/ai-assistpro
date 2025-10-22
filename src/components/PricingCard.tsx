@@ -4,17 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { useSubscription } from "@/hooks/useSubscription";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
 
 interface PricingCardProps {
   name: string;
@@ -37,31 +27,9 @@ export const PricingCard = ({
   index,
   planId,
 }: PricingCardProps) => {
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    phone: '',
-  });
-  
-  const subscription = useSubscription();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    subscription.mutate({
-      ...formData,
-      plan: planId,
-    }, {
-      onSuccess: () => {
-        setOpen(false);
-        setFormData({ name: '', email: '', company: '', phone: '' });
-      }
-    });
-  };
+  const navigate = useNavigate();
 
   return (
-    <>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -119,64 +87,12 @@ export const PricingCard = ({
             )}
             variant={popular ? "default" : "outline"}
             size="lg"
-            onClick={() => setOpen(true)}
+            onClick={() => navigate(`/checkout/${planId}`)}
           >
             {cta}
           </Button>
         </CardFooter>
       </Card>
     </motion.div>
-
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Assinar Plano {name}</DialogTitle>
-          <DialogDescription>
-            Preencha seus dados para começar
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name">Nome *</Label>
-            <Input
-              id="name"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label htmlFor="email">Email *</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label htmlFor="company">Empresa</Label>
-            <Input
-              id="company"
-              value={formData.company}
-              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label htmlFor="phone">Telefone</Label>
-            <Input
-              id="phone"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            />
-          </div>
-          <Button type="submit" className="w-full" disabled={subscription.isPending}>
-            {subscription.isPending ? 'Processando...' : 'Confirmar Assinatura'}
-          </Button>
-        </form>
-      </DialogContent>
-    </Dialog>
-    </>
   );
 };

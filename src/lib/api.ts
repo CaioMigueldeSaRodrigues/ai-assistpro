@@ -83,3 +83,38 @@ export const leadsApi = {
   
   triggerCapture: () => fetchApi('/leads/capture/trigger', { method: 'POST' }),
 };
+
+// Payment
+export const paymentApi = {
+  processPayment: (data: {
+    plan: string;
+    customer: {
+      name: string;
+      email: string;
+      phone: string;
+      document: string;
+      company?: string;
+    };
+    payment: {
+      method: 'credit_card' | 'pix';
+      card?: any;
+      pixKey?: string;
+      qrCode?: string;
+    };
+    amount: number;
+  }) => fetchApi('/payments/process', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+
+  getOrder: (orderId: string) => fetchApi(`/payments/orders/${orderId}`),
+
+  generatePIX: (data: { amount: number; customer: any }) => 
+    fetchApi('/payments/pix/generate', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  checkPaymentStatus: (orderId: string) => 
+    fetchApi(`/payments/status/${orderId}`),
+};

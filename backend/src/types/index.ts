@@ -66,3 +66,30 @@ export interface KPIMetrics {
   active_conversations: number;
   customer_satisfaction: number;
 }
+
+// Payment Schema
+export const PaymentSchema = z.object({
+  plan: z.string(),
+  customer: z.object({
+    name: z.string().min(2),
+    email: z.string().email(),
+    phone: z.string(),
+    document: z.string(),
+    company: z.string().optional(),
+  }),
+  payment: z.object({
+    method: z.enum(['credit_card', 'pix']),
+    card: z.object({
+      number: z.string(),
+      name: z.string(),
+      expiry: z.string(),
+      cvv: z.string(),
+      installments: z.string(),
+    }).optional(),
+    pixKey: z.string().optional(),
+    qrCode: z.string().optional(),
+  }),
+  amount: z.number(),
+});
+
+export type Payment = z.infer<typeof PaymentSchema>;
