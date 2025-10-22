@@ -58,6 +58,28 @@ async function migrate() {
     `);
     console.log('✅ Orders table created');
 
+    // Create bot_configurations table
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS bot_configurations (
+        id SERIAL PRIMARY KEY,
+        user_id VARCHAR(255) UNIQUE NOT NULL,
+        bot_name VARCHAR(255) NOT NULL,
+        company VARCHAR(255) NOT NULL,
+        industry VARCHAR(100),
+        description TEXT,
+        personality VARCHAR(50),
+        tone VARCHAR(50),
+        language VARCHAR(10),
+        working_hours JSONB,
+        business_rules JSONB,
+        integrations JSONB,
+        messages JSONB,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    console.log('✅ Bot configurations table created');
+
     // Create indexes
     await db.query(`
       CREATE INDEX IF NOT EXISTS idx_subscriptions_email ON subscriptions(email);
@@ -67,6 +89,7 @@ async function migrate() {
       CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email);
       CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
       CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);
+      CREATE INDEX IF NOT EXISTS idx_bot_configurations_user_id ON bot_configurations(user_id);
     `);
     console.log('✅ Indexes created');
 

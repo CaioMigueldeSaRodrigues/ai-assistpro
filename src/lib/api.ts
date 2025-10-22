@@ -84,6 +84,24 @@ export const leadsApi = {
   triggerCapture: () => fetchApi('/leads/capture/trigger', { method: 'POST' }),
 };
 
+// Bot Configuration
+export const botApi = {
+  getConfig: (userId: string) => fetchApi(`/bot/config/${userId}`),
+  
+  saveConfig: (userId: string, config: any) => fetchApi(`/bot/config/${userId}`, {
+    method: 'POST',
+    body: JSON.stringify(config),
+  }),
+  
+  testBot: (userId: string, message: string) => fetchApi(`/bot/test/${userId}`, {
+    method: 'POST',
+    body: JSON.stringify({ message }),
+  }),
+  
+  getAnalytics: (userId: string, days: number = 7) => 
+    fetchApi(`/bot/analytics/${userId}?days=${days}`),
+};
+
 // Payment
 export const paymentApi = {
   processPayment: (data: {
