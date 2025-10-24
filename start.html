@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents Platform - Início</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .credentials {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            text-align: left;
+        }
+        
+        .credentials h3 {
+            color: #111827;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .credential-item {
+            margin-bottom: 10px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .credential-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .credential-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        .credential-item small {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🤖</div>
+        <h1>AI Agents Platform</h1>
+        <p>Sistema de Dashboards com Controle de Acesso</p>
+        
+        <div class="btn-container">
+            <a href="/login.html" class="btn btn-primary">🔐 Fazer Login</a>
+        </div>
+        
+        <div class="credentials">
+            <h3>🔑 Credenciais de Teste - Clique para usar:</h3>
+            
+            <div class="credential-item" onclick="goToLogin('adm@adm.com')">
+                <strong>👑 Administrador</strong>
+                <small>adm@adm.com / 1234 - Acesso total</small>
+            </div>
+            
+            <div class="credential-item" onclick="goToLogin('basico@demo.com')">
+                <strong>💼 Plano Básico</strong>
+                <small>basico@demo.com / 1234</small>
+            </div>
+            
+            <div class="credential-item" onclick="goToLogin('pro@demo.com')">
+                <strong>🚀 Plano Pro</strong>
+                <small>pro@demo.com / 1234</small>
+            </div>
+            
+            <div class="credential-item" onclick="goToLogin('enterprise@demo.com')">
+                <strong>⭐ Plano Enterprise</strong>
+                <small>enterprise@demo.com / 1234</small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToLogin(email) {
+            localStorage.setItem('prefilledEmail', email);
+            window.location.href = '/login.html';
+        }
+
+        // Verificar se já está logado
+        const session = localStorage.getItem('userSession');
+        if (session) {
+            const userData = JSON.parse(session);
+            const dashboards = {
+                'admin': '/dashboard-admin.html',
+                'basic': '/dashboard-basic.html',
+                'pro': '/dashboard-pro.html',
+                'enterprise': '/dashboard-enterprise.html'
+            };
+            
+            if (dashboards[userData.plan]) {
+                document.body.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100vh; flex-direction: column; color: white;">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">🤖</div>
+                        <h2 style="margin-bottom: 10px;">Bem-vindo de volta, ${userData.name}!</h2>
+                        <p>Redirecionando para seu dashboard...</p>
+                    </div>
+                `;
+                setTimeout(() => {
+                    window.location.href = dashboards[userData.plan];
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>

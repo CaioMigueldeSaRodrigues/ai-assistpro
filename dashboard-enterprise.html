@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Enterprise - AI Agents</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .badge {
+            background: #ea580c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+        
+        .card-description {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .tabs {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tab-list {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+        
+        .tab-button.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .chart-container {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .metric-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .badge-primary {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .badge-orange {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .navbar-brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f97316;
+        }
+        
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn-logout {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-logout:hover {
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">🤖 AI Agents</div>
+        <div class="navbar-user">
+            <span id="userName" style="font-weight: 500;"></span>
+            <button class="btn-logout" onclick="logout()">Sair</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Painel Enterprise</h1>
+                <p>Solução completa com analytics avançados</p>
+            </div>
+            <div class="badge">Plano Enterprise</div>
+        </div>
+
+
+        <div class="stats-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Conversas Hoje</div>
+                </div>
+                <div class="card-value">127</div>
+                <div class="card-description">+23% em relação a ontem</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Receita Gerada</div>
+                </div>
+                <div class="card-value">R$ 45.2k</div>
+                <div class="card-description">Este mês pelos agentes</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Taxa de Conversão</div>
+                </div>
+                <div class="card-value">12.8%</div>
+                <div class="card-description">+3.2% esta semana</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">NPS</div>
+                </div>
+                <div class="card-value">8.7</div>
+                <div class="card-description">Baseado em 89 avaliações</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab-list">
+                <button class="tab-button active" onclick="switchTab('analytics')">
+                    📊 Analytics
+                </button>
+                <button class="tab-button" onclick="switchTab('atendimento')">
+                    🤖 Atendimento
+                </button>
+                <button class="tab-button" onclick="switchTab('prospeccao')">
+                    🎯 Prospecção
+                </button>
+                <button class="tab-button" onclick="switchTab('relatorios')">
+                    📈 Relatórios
+                </button>
+            </div>
+
+
+            <div id="analytics" class="tab-content active">
+                <h3 style="margin-bottom: 20px;">Analytics Avançados</h3>
+                
+                <div class="chart-container">
+                    <div style="text-align: center; color: #6b7280;">
+                        <p style="font-size: 1.2rem; margin-bottom: 10px;">📊</p>
+                        <p>Gráfico de Performance em Tempo Real</p>
+                        <p style="font-size: 0.875rem; margin-top: 5px;">Conversões, Leads e ROI</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px; font-size: 1rem;">Funil de Conversão</h4>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Visitantes</span>
+                            <strong>2.547</strong>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Leads Qualificados</span>
+                            <strong>487</strong>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Conversões</span>
+                            <strong>127</strong>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px; font-size: 1rem;">Canais de Aquisição</h4>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">WhatsApp</span>
+                            <span class="metric-badge badge-success">45%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">WebChat</span>
+                            <span class="metric-badge badge-primary">32%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Prospecção</span>
+                            <span class="metric-badge badge-orange">23%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="atendimento" class="tab-content">
+                <h3 style="margin-bottom: 20px;">Configuração do Assistente de Atendimento</h3>
+                <form>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 500; margin-bottom: 8px;">Nome do Assistente</label>
+                        <input type="text" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;" value="Assistente Enterprise">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 500; margin-bottom: 8px;">Mensagem de Boas-vindas</label>
+                        <textarea style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; min-height: 100px;">Olá! Sou seu assistente Enterprise com IA avançada. Como posso ajudar?</textarea>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 500; margin-bottom: 8px;">Modelo de IA</label>
+                        <select style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;">
+                            <option>GPT-4 Turbo</option>
+                            <option>GPT-4</option>
+                            <option>Claude 3 Opus</option>
+                        </select>
+                    </div>
+                    <button type="submit" style="background: #f97316; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer;">
+                        Salvar Configurações
+                    </button>
+                </form>
+            </div>
+
+            <div id="prospeccao" class="tab-content">
+                <h3 style="margin-bottom: 20px;">Configuração do Agente de Prospecção</h3>
+                <form>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 500; margin-bottom: 8px;">Público-Alvo</label>
+                        <input type="text" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;" placeholder="Ex: Empresas de tecnologia com 50+ funcionários">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 500; margin-bottom: 8px;">Estratégia de Abordagem</label>
+                        <select style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px;">
+                            <option>Consultiva</option>
+                            <option>Direta</option>
+                            <option>Educacional</option>
+                        </select>
+                    </div>
+                    <button type="submit" style="background: #f97316; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer;">
+                        Salvar Configurações
+                    </button>
+                </form>
+            </div>
+
+
+            <div id="relatorios" class="tab-content">
+                <h3 style="margin-bottom: 20px;">Relatórios Detalhados</h3>
+                
+                <div class="analytics-grid">
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px;">Relatório de Conversões</h4>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Conversões por Atendimento</span>
+                            <span class="metric-badge badge-success">67%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Conversões por Prospecção</span>
+                            <span class="metric-badge badge-primary">23%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Conversões Mistas</span>
+                            <span class="metric-badge badge-orange">10%</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4 style="margin-bottom: 15px;">ROI por Canal</h4>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">WhatsApp</span>
+                            <span class="metric-badge badge-success">450%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">WebChat</span>
+                            <span class="metric-badge badge-primary">320%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span style="font-size: 0.875rem;">Prospecção</span>
+                            <span class="metric-badge badge-orange">280%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button style="background: #f97316; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; margin-right: 10px;">
+                        📥 Exportar Relatório PDF
+                    </button>
+                    <button style="background: white; color: #f97316; padding: 10px 20px; border: 2px solid #f97316; border-radius: 8px; font-weight: 500; cursor: pointer;">
+                        📊 Exportar Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Verificar autenticação
+        function checkAuth() {
+            const session = localStorage.getItem('userSession');
+            if (!session) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            const userData = JSON.parse(session);
+            if (userData.plan !== 'enterprise' && userData.plan !== 'admin') {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Verificar ao carregar
+        if (!checkAuth()) {
+            document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;"><p>Redirecionando...</p></div>';
+        } else {
+            const userData = JSON.parse(localStorage.getItem('userSession'));
+            document.getElementById('userName').textContent = userData.name;
+        }
+
+        function logout() {
+            localStorage.removeItem('userSession');
+            window.location.href = 'login.html';
+        }
+
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-button');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Configurações salvas com sucesso!');
+            });
+        });
+
+        // Animate cards on load
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading-container {
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .loading-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="logo">🤖</div>
+        <div class="loading-text">AI Agents Platform</div>
+        <div class="spinner"></div>
+        <p style="margin-top: 20px; opacity: 0.9;">Carregando...</p>
+    </div>
+
+    <script>
+        // Verificar se há sessão ativa
+        const session = localStorage.getItem('userSession');
+        
+        if (session) {
+            const userData = JSON.parse(session);
+            const dashboards = {
+                'admin': 'dashboard-admin.html',
+                'basic': 'dashboard-basic.html',
+                'pro': 'dashboard-pro.html',
+                'enterprise': 'dashboard-enterprise.html'
+            };
+            
+            // Redirecionar para o dashboard correto
+            setTimeout(() => {
+                window.location.href = dashboards[userData.plan] || 'login.html';
+            }, 1000);
+        } else {
+            // Redirecionar para login
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AI Agents Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+        
+        .logo-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .login-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #111827;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+        
+        .demo-accounts {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .demo-title {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .demo-account {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .demo-account:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+        }
+        
+        .demo-account-name {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 3px;
+        }
+        
+        .demo-account-info {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <div class="logo-icon">🤖</div>
+            <div class="logo-text">AI Agents</div>
+        </div>
+        
+        <h2 class="login-title">Faça seu login</h2>
+        
+        <div id="errorMessage" class="error-message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="seu@email.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Senha</label>
+                <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+            </div>
+            
+            <button type="submit" class="btn-login">Entrar</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #6b7280;">Autenticando...</p>
+        </div>
+        
+        <div class="demo-accounts">
+            <div class="demo-title">Contas de Demonstração - Clique para usar:</div>
+            
+            <div class="demo-account" onclick="fillLogin('adm@adm.com', '1234')">
+                <div class="demo-account-name">👑 Administrador</div>
+                <div class="demo-account-info">adm@adm.com / 1234 - Acesso total a todos os planos</div>
+            </div>
+            
+            <div class="demo-account" onclick="fillLogin('basico@demo.com', '1234')">
+                <div class="demo-account-name">💼 Plano Básico</div>
+                <div class="demo-account-info">basico@demo.com / 1234 - Atendimento 24/7</div>
+            </div>
+            
+            <div class="demo-account" onclick="fillLogin('pro@demo.com', '1234')">
+                <div class="demo-account-name">🚀 Plano Pro</div>
+                <div class="demo-account-info">pro@demo.com / 1234 - Atendimento + Prospecção</div>
+            </div>
+            
+            <div class="demo-account" onclick="fillLogin('enterprise@demo.com', '1234')">
+                <div class="demo-account-name">⭐ Plano Enterprise</div>
+                <div class="demo-account-info">enterprise@demo.com / 1234 - Analytics Avançados</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database de usuários (em produção, isso seria no backend)
+        const users = {
+            'adm@adm.com': {
+                password: '1234',
+                plan: 'admin',
+                name: 'Administrador',
+                dashboard: 'dashboard-admin.html'
+            },
+            'basico@demo.com': {
+                password: '1234',
+                plan: 'basic',
+                name: 'Usuário Básico',
+                dashboard: 'dashboard-basic.html'
+            },
+            'pro@demo.com': {
+                password: '1234',
+                plan: 'pro',
+                name: 'Usuário Pro',
+                dashboard: 'dashboard-pro.html'
+            },
+            'enterprise@demo.com': {
+                password: '1234',
+                plan: 'enterprise',
+                name: 'Usuário Enterprise',
+                dashboard: 'dashboard-enterprise.html'
+            }
+        };
+
+        function fillLogin(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('loginForm').style.display = show ? 'none' : 'block';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            showLoading(true);
+            
+            // Simular delay de autenticação
+            setTimeout(() => {
+                const user = users[email];
+                
+                if (!user) {
+                    showLoading(false);
+                    showError('Email não encontrado!');
+                    return;
+                }
+                
+                if (user.password !== password) {
+                    showLoading(false);
+                    showError('Senha incorreta!');
+                    return;
+                }
+                
+                // Salvar sessão no localStorage
+                localStorage.setItem('userSession', JSON.stringify({
+                    email: email,
+                    name: user.name,
+                    plan: user.plan,
+                    loginTime: new Date().toISOString()
+                }));
+                
+                // Redirecionar para o dashboard correto
+                window.location.href = user.dashboard;
+            }, 1000);
+        });
+
+        // Verificar se já está logado
+        window.addEventListener('load', function() {
+            const session = localStorage.getItem('userSession');
+            if (session) {
+                const userData = JSON.parse(session);
+                const user = users[userData.email];
+                if (user) {
+                    window.location.href = user.dashboard;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

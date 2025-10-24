@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents - Escolha seu Plano</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .plan-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+        
+        .plan-basic::before {
+            background: #3b82f6;
+        }
+        
+        .plan-pro::before {
+            background: #9333ea;
+        }
+        
+        .plan-enterprise::before {
+            background: #ea580c;
+        }
+        
+        .plan-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .plan-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+        
+        .plan-description {
+            color: #6b7280;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .plan-features {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+        
+        .feature-icon {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .plan-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+        
+        .btn-basic {
+            background: #3b82f6;
+        }
+        
+        .btn-basic:hover {
+            background: #2563eb;
+        }
+        
+        .btn-pro {
+            background: #9333ea;
+        }
+        
+        .btn-pro:hover {
+            background: #7e22ce;
+        }
+        
+        .btn-enterprise {
+            background: #ea580c;
+        }
+        
+        .btn-enterprise:hover {
+            background: #c2410c;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .demo-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+        
+        .demo-btn {
+            padding: 15px 40px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .demo-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Agents Platform</h1>
+            <p>Escolha o plano ideal para o seu negócio</p>
+        </div>
+
+        <div class="plans-grid">
+            <div class="plan-card plan-basic" onclick="window.location.href='dashboard-basic.html'">
+                <div class="plan-icon">💼</div>
+                <div class="plan-name">Básico</div>
+                <div class="plan-description">
+                    Perfeito para pequenos negócios que querem automatizar o atendimento
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Até 1.000 conversas/mês</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Assistente de atendimento 24/7</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>WhatsApp + Site</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Suporte por email</span>
+                    </div>
+                </div>
+                <button class="plan-btn btn-basic">Ver Dashboard Básico</button>
+            </div>
+
+            <div class="plan-card plan-pro" onclick="window.location.href='dashboard-pro.html'">
+                <div class="plan-icon">🚀</div>
+                <div class="plan-name">Pro</div>
+                <div class="plan-description">
+                    Para empresas que querem atendimento + prospecção ativa de leads
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Até 5.000 conversas/mês</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Agente de prospecção</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Integração com CRM</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Relatórios semanais</span>
+                    </div>
+                </div>
+                <button class="plan-btn btn-pro">Ver Dashboard Pro</button>
+            </div>
+
+            <div class="plan-card plan-enterprise" onclick="window.location.href='dashboard-enterprise.html'">
+                <div class="plan-icon">👑</div>
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-description">
+                    Solução completa com analytics avançados e suporte dedicado
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Conversas ilimitadas</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Analytics avançados</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Múltiplos agentes de IA</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Suporte dedicado 24/7</span>
+                    </div>
+                </div>
+                <button class="plan-btn btn-enterprise">Ver Dashboard Enterprise</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">Ou explore o Dashboard Geral</div>
+            <button class="demo-btn" onclick="window.location.href='dashboard.html'">
+                🎯 Acessar Dashboard Principal
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Redirecionar para login se não estiver autenticado
+        window.addEventListener('load', function() {
+            const session = localStorage.getItem('userSession');
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Add animation on load
+            const cards = document.querySelectorAll('.plan-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

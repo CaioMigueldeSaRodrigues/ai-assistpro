@@ -2,12 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, LogIn } from "lucide-react";
 import { Link as ScrollLink } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-ai-agent.jpg";
 
 export const Hero = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
@@ -46,7 +48,17 @@ export const Hero = () => {
                 </Button>
               </ScrollLink>
               
-              <Button size="lg" variant="outline" className="w-full sm:w-auto group">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="w-full sm:w-auto group border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                onClick={() => navigate('/login')}
+              >
+                <LogIn className="mr-2 h-4 w-4" />
+                Acessar Dashboards
+              </Button>
+              
+              <Button size="lg" variant="ghost" className="w-full sm:w-auto group">
                 <Play className="mr-2 h-4 w-4" />
                 {t("hero.ctaSecondary")}
               </Button>

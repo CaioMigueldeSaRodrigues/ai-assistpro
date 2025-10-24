@@ -293,16 +293,16 @@ export const platformAnalytics = {
       analytics.trackEvent('page_load_time', 'performance', 'load', Math.round(loadTime));
     });
 
-    // Track Core Web Vitals
-    if ('web-vitals' in window) {
-      import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-        getCLS((metric) => analytics.trackEvent('web_vital', 'performance', 'CLS', metric.value));
-        getFID((metric) => analytics.trackEvent('web_vital', 'performance', 'FID', metric.value));
-        getFCP((metric) => analytics.trackEvent('web_vital', 'performance', 'FCP', metric.value));
-        getLCP((metric) => analytics.trackEvent('web_vital', 'performance', 'LCP', metric.value));
-        getTTFB((metric) => analytics.trackEvent('web_vital', 'performance', 'TTFB', metric.value));
-      });
-    }
+    // Track Core Web Vitals (commented out for now)
+    // if ('web-vitals' in window) {
+    //   import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+    //     getCLS((metric) => analytics.trackEvent('web_vital', 'performance', 'CLS', metric.value));
+    //     getFID((metric) => analytics.trackEvent('web_vital', 'performance', 'FID', metric.value));
+    //     getFCP((metric) => analytics.trackEvent('web_vital', 'performance', 'FCP', metric.value));
+    //     getLCP((metric) => analytics.trackEvent('web_vital', 'performance', 'LCP', metric.value));
+    //     getTTFB((metric) => analytics.trackEvent('web_vital', 'performance', 'TTFB', metric.value));
+    //   });
+    // }
   },
 
   // Track errors

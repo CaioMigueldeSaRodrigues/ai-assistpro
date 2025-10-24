@@ -89,7 +89,7 @@ export function BotConfiguration() {
   // Load config when data is available
   useEffect(() => {
     if (botConfig) {
-      setConfig(botConfig);
+      setConfig(botConfig as any);
     }
   }, [botConfig]);
 
@@ -108,7 +108,7 @@ export function BotConfiguration() {
     }
 
     testBot.mutate(testMessage, {
-      onSuccess: (response) => {
+      onSuccess: (response: any) => {
         setTestResponse(response.botResponse);
         setIsTestMode(true);
       }
@@ -292,10 +292,10 @@ export function BotConfiguration() {
 
               {config.workingHours.enabled && (
                 <div className="space-y-3">
-                  {Object.entries(config.workingHours).map(([day, hours]) => {
+                  {Object.entries(config.workingHours).map(([day, hours]: [string, any]) => {
                     if (day === 'enabled' || day === 'timezone') return null;
                     
-                    const dayNames = {
+                    const dayNames: Record<string, string> = {
                       monday: 'Segunda-feira',
                       tuesday: 'Terça-feira', 
                       wednesday: 'Quarta-feira',
@@ -309,30 +309,30 @@ export function BotConfiguration() {
                       <div key={day} className="flex items-center gap-4">
                         <div className="w-24">
                           <Switch
-                            checked={hours.enabled}
+                            checked={hours?.enabled || false}
                             onCheckedChange={(checked) => 
                               setConfig({
                                 ...config,
                                 workingHours: {
                                   ...config.workingHours,
-                                  [day]: {...hours, enabled: checked}
+                                  [day]: {...(hours || {}), enabled: checked}
                                 }
                               })
                             }
                           />
                         </div>
-                        <div className="w-32 text-sm">{dayNames[day]}</div>
-                        {hours.enabled && (
+                        <div className="w-32 text-sm">{dayNames[day] || day}</div>
+                        {hours?.enabled && (
                           <>
                             <Input
                               type="time"
-                              value={hours.start}
+                              value={hours?.start || '09:00'}
                               onChange={(e) => 
                                 setConfig({
                                   ...config,
                                   workingHours: {
                                     ...config.workingHours,
-                                    [day]: {...hours, start: e.target.value}
+                                    [day]: {...(hours || {}), start: e.target.value}
                                   }
                                 })
                               }
@@ -341,13 +341,13 @@ export function BotConfiguration() {
                             <span className="text-muted-foreground">às</span>
                             <Input
                               type="time"
-                              value={hours.end}
+                              value={hours?.end || '18:00'}
                               onChange={(e) => 
                                 setConfig({
                                   ...config,
                                   workingHours: {
                                     ...config.workingHours,
-                                    [day]: {...hours, end: e.target.value}
+                                    [day]: {...(hours || {}), end: e.target.value}
                                   }
                                 })
                               }
