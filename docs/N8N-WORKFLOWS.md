@@ -5,8 +5,8 @@ Workflows completos do n8n para replicar toda a funcionalidade do backend Node.j
 ## 📁 Arquivos
 
 - **`ai-agents-complete-workflow.json`** - Workflow principal completo
-- **`environment-variables.md`** - Variáveis de ambiente necessárias  
-- **`setup-instructions.md`** - Guia passo a passo de configuração
+- **`N8N-ENVIRONMENT.md`** - Variáveis de ambiente necessárias  
+- **`N8N-SETUP.md`** - Guia passo a passo de configuração
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -139,7 +139,7 @@ fetch(`${API_BASE}/api/kpi/metrics`);
 4. **Banco inacessível** - Verificar credenciais PostgreSQL
 
 ### Suporte
-- Consulte `setup-instructions.md` para guia detalhado
+- Consulte `N8N-SETUP.md` para guia detalhado
 - Verifique logs de execução no n8n
 - Teste cada nó individualmente
 

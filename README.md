@@ -1,383 +1,263 @@
-# 🤖 AI Agents Platform - Plataforma Completa de Agentes de IA
+# 🤖 AI Agents Platform
 
-Plataforma full-stack para venda e gestão de agentes de IA com captura automática de leads, sistema de assinaturas, dashboards HTML interativos e analytics avançados.
+> Plataforma completa para venda e gestão de agentes de IA com captura automática de leads, sistema de assinaturas e analytics avançados.
 
-**🎯 Projeto Lovable**: https://lovable.dev/projects/f1c67997-c6dc-48b5-ae89-8c37191c2001
+## 🎯 Objetivo
 
-## 🌟 Visão Geral
-
-Esta é uma solução completa que combina:
-- **Landing page moderna** para venda de agentes de IA
-- **Sistema de login** com controle de acesso por plano
-- **4 Dashboards HTML** interativos (Admin, Básico, Pro, Enterprise)
-- **Backend robusto** com rate limiting e qualificação de leads
+Desenvolver uma solução full-stack que permita:
+- **Venda de agentes de IA** através de landing page moderna
+- **Gestão de assinaturas** com 3 planos (Básico, Pro, Enterprise)
+- **Captura automática de leads** via Google BigQuery
+- **Dashboards interativos** para diferentes níveis de acesso
 - **Analytics avançados** com métricas em tempo real
-- **N8N workflows** para automação completa
-- **Sistema de assinaturas** com 3 planos
-- **Integração completa** com Google Cloud, BigQuery e Sheets
+- **Automação completa** via N8N workflows
 
 ## 🏗️ Arquitetura
 
 ```
-├── 🎨 Frontend (React + TypeScript)
-│   ├── Landing page multilíngue (4 idiomas)
-│   ├── Sistema de login integrado
-│   ├── Dashboards HTML interativos (4 níveis)
-│   ├── Sistema de assinaturas
-│   └── Design system completo (shadcn/ui)
-│
-├── 📊 Dashboards HTML (Standalone)
-│   ├── Dashboard Administrativo (acesso total)
-│   ├── Dashboard Básico (atendimento 24/7)
-│   ├── Dashboard Pro (atendimento + prospecção)
-│   └── Dashboard Enterprise (analytics avançados)
-│
-├── ⚙️ Backend (Node.js + Express + TypeScript)
-│   ├── API REST completa
-│   ├── Rate limiting com exponential backoff
-│   ├── Qualificação e scoring de leads
-│   ├── Configuração dinâmica de horários
-│   ├── Analytics e monitoramento
-│   ├── Captura automática de leads (BigQuery)
-│   ├── Exportação para Google Sheets
-│   └── Gestão de assinaturas (PostgreSQL)
-│
-└── 🤖 N8N Workflows
-    ├── Captura automática de leads por CNAE
-    ├── Processamento em lotes
-    ├── Integração WhatsApp (Evolution API)
-    └── Agendamentos automáticos
+Frontend (React + TypeScript)
+├── Landing page multilíngue
+├── Sistema de autenticação
+├── Dashboards por plano
+└── Sistema de pagamentos
+
+Backend (Node.js + Express)
+├── API REST completa
+├── Rate limiting inteligente
+├── Qualificação de leads
+├── Analytics e KPIs
+└── Integração com serviços externos
+
+Automação (N8N)
+├── Captura de leads por CNAE
+├── Processamento em lotes
+├── Integração WhatsApp
+└── Agendamentos automáticos
 ```
 
-## 🚀 Quick Start
-
-### 1. Frontend
-```bash
-# Instalar dependências
-npm install
-
-# Configurar variáveis de ambiente
-cp .env.example .env
-# Edite VITE_API_URL=http://localhost:3001/api
-
-# Iniciar desenvolvimento
-npm run dev
-# Acesse: http://localhost:8080
-```
-
-### 🔐 Sistema de Login
-
-**Credenciais de Demonstração:**
-- **Admin:** adm@adm.com / 1234 (acesso total)
-- **Básico:** basico@demo.com / 1234
-- **Pro:** pro@demo.com / 1234
-- **Enterprise:** enterprise@demo.com / 1234
-
-**URLs dos Dashboards:**
-- Login: http://localhost:8080/login.html
-- Admin: http://localhost:8080/dashboard-admin.html
-- Básico: http://localhost:8080/dashboard-basic.html
-- Pro: http://localhost:8080/dashboard-pro.html
-- Enterprise: http://localhost:8080/dashboard-enterprise.html
-
-### 2. Backend
-```bash
-# Navegar para o backend
-cd backend
-
-# Instalar dependências
-npm install
-
-# Configurar ambiente
-cp .env.example .env
-# Configure as variáveis (ver SETUP.md)
-
-# Executar migrações
-npm run migrate
-
-# Iniciar servidor
-npm run dev
-# API: http://localhost:3001
-```
-
-## 📚 Documentação Detalhada
-
-- 📖 **[Setup Backend Completo](backend/SETUP.md)** - Guia passo a passo
-- 🔧 **[Documentação da API](backend/README.md)** - Endpoints e funcionalidades
-- 🔐 **[Sistema de Login](public/README-LOGIN.md)** - Credenciais e acesso
-- 📊 **[Análise Backend + N8N](ANALISE-BACKEND-N8N.md)** - Arquitetura completa
-- 🚀 **[Melhorias Implementadas](MELHORIAS-IMPLEMENTADAS.md)** - Novos recursos
-- 🔗 **[Integração Completa](INTEGRACAO-COMPLETA.md)** - React + HTML
-- 🎯 **[Lovable Editor](https://lovable.dev/projects/f1c67997-c6dc-48b5-ae89-8c37191c2001)** - Editor visual
-
-## 🎯 Funcionalidades Principais
-
-### 🎨 Frontend React
-- ✅ **Landing page responsiva** com animações suaves
-- ✅ **Multilíngue** (Português, Inglês, Espanhol, Chinês)
-- ✅ **Sistema de login** com autenticação JWT
-- ✅ **3 planos de assinatura** (Basic R$297, Pro R$697, Enterprise R$1.497)
-- ✅ **Seção de preview** dos dashboards
-- ✅ **Formulários integrados** com validação
-- ✅ **Design system completo** (50+ componentes UI)
-- ✅ **SEO otimizado** e performance
-
-### 📊 Dashboards HTML
-- ✅ **4 níveis de acesso** (Admin, Básico, Pro, Enterprise)
-- ✅ **Controle de sessão** com localStorage
-- ✅ **Design responsivo** e moderno
-- ✅ **Métricas em tempo real** simuladas
-- ✅ **Formulários de configuração** funcionais
-- ✅ **Sistema de tabs** (Pro/Enterprise)
-- ✅ **Logout integrado** em todos os dashboards
-
-### ⚙️ Backend Avançado
-- ✅ **Rate limiting** com exponential backoff (5-60s)
-- ✅ **Qualificação de leads** com scoring 0-100
-- ✅ **Configuração dinâmica** de horários (banco de dados)
-- ✅ **Analytics completo** (conversão, demanda, performance)
-- ✅ **Captura automática de leads** via Google BigQuery
-- ✅ **Processamento em lotes** (300 registros por vez)
-- ✅ **Exportação para Google Sheets** automática
-- ✅ **Cron jobs** (execução diária às 6h)
-- ✅ **API REST completa** com validação Zod
-- ✅ **Sistema de assinaturas** robusto
-
-### 🤖 N8N Workflows
-- ✅ **Captura por CNAE** configurável
-- ✅ **Filtros avançados** (UF, porte, data)
-- ✅ **Integração WhatsApp** (Evolution API)
-- ✅ **Agendamentos automáticos** com IA
-- ✅ **Error handling** robusto
-
-## 🛠️ Stack Tecnológica
+## 🛠️ Tecnologias Utilizadas
 
 ### Frontend
-- **React 18** + **TypeScript**
-- **Vite** (build tool)
-- **Tailwind CSS** + **shadcn/ui**
-- **Framer Motion** (animações)
-- **i18next** (internacionalização)
-- **TanStack Query** (state management)
-- **React Hook Form** + **Zod**
+- **React 18** - Biblioteca para interfaces
+- **TypeScript** - Tipagem estática
+- **Vite** - Build tool moderna
+- **Tailwind CSS** - Framework CSS utilitário
+- **shadcn/ui** - Componentes UI modernos
+- **Framer Motion** - Animações fluidas
+- **i18next** - Internacionalização (4 idiomas)
+- **TanStack Query** - Gerenciamento de estado
+- **React Hook Form** - Formulários performáticos
+- **Zod** - Validação de schemas
 
 ### Backend
-- **Node.js** + **Express** + **TypeScript**
-- **PostgreSQL** (dados da aplicação)
-- **Google BigQuery** (captura de leads)
-- **Google Sheets API** (exportação)
-- **node-cron** (automação)
-- **Zod** (validação)
-- **JWT** + **bcryptjs** (autenticação)
+- **Node.js** - Runtime JavaScript
+- **Express** - Framework web minimalista
+- **TypeScript** - Tipagem para backend
+- **PostgreSQL** - Banco de dados relacional
+- **Prisma** - ORM moderno
+- **JWT** - Autenticação via tokens
+- **bcryptjs** - Criptografia de senhas
+- **node-cron** - Agendamento de tarefas
+- **Zod** - Validação de dados
 
-### Serviços Avançados
-- **Rate Limiter** (exponential backoff)
-- **Lead Qualifier** (scoring e filtros)
-- **Schedule Config** (horários dinâmicos)
-- **Analytics Service** (métricas e KPIs)
+### Serviços Cloud
+- **Google BigQuery** - Data warehouse para leads
+- **Google Sheets API** - Exportação de dados
+- **Google Cloud Storage** - Armazenamento de arquivos
+- **Evolution API** - Integração WhatsApp
+- **Heroku/Railway** - Deploy do backend
+- **Vercel** - Deploy do frontend
 
-## 📊 Workflow de Captura de Leads
+### Automação
+- **N8N** - Plataforma de automação
+- **Webhooks** - Comunicação entre serviços
+- **Cron Jobs** - Execução programada
+- **Rate Limiting** - Controle de requisições
 
-Replica o workflow do n8n original:
+## 📚 APIs Utilizadas
 
-1. **Trigger automático** às 6h (America/Sao_Paulo)
-2. **Busca no BigQuery** por empresas novas (CNAE configurável)
-3. **Processamento em lotes** de 300 registros
-4. **Delay de 3 segundos** entre lotes
-5. **Exportação para Sheets** com dados formatados
+### Internas
+- **Authentication API** - Login/registro de usuários
+- **Leads API** - Captura e qualificação de leads
+- **Subscriptions API** - Gestão de assinaturas
+- **Analytics API** - Métricas e KPIs
+- **Contact API** - Formulários de contato
+- **Bot API** - Configuração de agentes
 
-## 📡 API Endpoints
+### Externas
+- **Google BigQuery API** - Consulta de dados empresariais
+- **Google Sheets API** - Exportação para planilhas
+- **Evolution API** - Envio de mensagens WhatsApp
+- **Stripe API** - Processamento de pagamentos
+- **SendGrid API** - Envio de emails
 
-```bash
-# Health Check
-GET /health
+## 📦 Bibliotecas Principais
 
-# Autenticação
-POST   /api/auth/login               # Login
-POST   /api/auth/register            # Registro
-GET    /api/auth/me                  # Usuário atual
-
-# Leads
-GET    /api/leads                    # Listar leads
-GET    /api/leads/:cnpj              # Buscar lead por CNPJ
-GET    /api/leads/stats/:cnae        # Estatísticas por CNAE
-POST   /api/leads/capture/trigger    # Trigger manual
-POST   /api/leads/qualify            # Qualificar leads
-
-# Assinaturas
-POST   /api/subscriptions            # Criar assinatura
-GET    /api/subscriptions/:email     # Buscar por email
-GET    /api/subscriptions            # Listar (admin)
-
-# Contato
-POST   /api/contact                  # Enviar mensagem
-GET    /api/contact                  # Listar (admin)
-
-# KPIs
-GET    /api/kpi/metrics              # Métricas gerais
-GET    /api/kpi/trends               # Tendências
-GET    /api/kpi/plans                # Distribuição por plano
-
-# Analytics
-GET    /api/analytics/dashboard      # Dashboard completo
-GET    /api/analytics/conversion     # Taxa de conversão
-GET    /api/analytics/popular-slots  # Horários populares
-GET    /api/analytics/agent-performance  # Performance dos agentes
-
-# Configuração de Horários
-GET    /api/schedule/config          # Obter configuração
-PUT    /api/schedule/hours           # Atualizar horários
-POST   /api/schedule/holiday         # Adicionar feriado
-GET    /api/schedule/next-slot       # Próximo horário disponível
-
-# Bot
-GET    /api/bot/config               # Configuração do bot
-PUT    /api/bot/config               # Atualizar configuração
-POST   /api/bot/train                # Treinar bot
+### Produção
+```json
+{
+  "react": "^18.2.0",
+  "typescript": "^5.0.0",
+  "express": "^4.18.0",
+  "prisma": "^5.0.0",
+  "tailwindcss": "^3.3.0",
+  "framer-motion": "^10.0.0",
+  "react-hook-form": "^7.45.0",
+  "zod": "^3.22.0",
+  "jsonwebtoken": "^9.0.0",
+  "bcryptjs": "^2.4.3",
+  "node-cron": "^3.0.0"
+}
 ```
 
-## 🔐 Configuração de Ambiente
-
-### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:3001/api
+### Desenvolvimento
+```json
+{
+  "vite": "^4.4.0",
+  "@types/node": "^20.0.0",
+  "@types/react": "^18.2.0",
+  "eslint": "^8.45.0",
+  "prettier": "^3.0.0",
+  "nodemon": "^3.0.0"
+}
 ```
 
-### Backend (backend/.env)
-```env
-# Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/ai_agents
+## 🚀 Linguagens de Programação
 
-# Google Cloud
-GOOGLE_PROJECT_ID=seu-projeto-id
-GOOGLE_APPLICATION_CREDENTIALS=./credentials/google-cloud-key.json
-GOOGLE_SHEETS_ID=sua-planilha-id
+- **TypeScript** (95%) - Frontend e Backend
+- **JavaScript** (3%) - Configurações e scripts
+- **SQL** (1%) - Queries de banco de dados
+- **HTML/CSS** (1%) - Templates e estilos
 
-# Security
-JWT_SECRET=seu-jwt-secret-super-seguro
-BCRYPT_ROUNDS=12
+## 🌟 Funcionalidades Principais
 
-# Lead Capture
-CNAE_DEFAULT=5611201
-LEAD_CAPTURE_INTERVAL_DAYS=7
-LEAD_CAPTURE_LIMIT=10000
-LEAD_CAPTURE_BATCH_SIZE=300
-LEAD_CAPTURE_DELAY_SECONDS=7
+### 🎨 Frontend
+- Landing page responsiva com animações
+- Sistema de autenticação JWT
+- 4 dashboards interativos (Admin, Básico, Pro, Enterprise)
+- Multilíngue (PT, EN, ES, ZH)
+- Sistema de pagamentos integrado
+- Design system completo
 
-# Lead Qualification
-MIN_LEAD_SCORE=50
-REQUIRE_EMAIL=false
-REQUIRE_PHONE=true
+### ⚙️ Backend
+- API REST com rate limiting
+- Qualificação automática de leads
+- Analytics em tempo real
+- Configuração dinâmica de horários
+- Processamento em lotes
+- Exportação para Google Sheets
 
-# Server
-PORT=3001
-NODE_ENV=development
-CORS_ORIGIN=http://localhost:8080
-```
+### 🤖 Automação
+- Captura de leads por CNAE
+- Integração WhatsApp automática
+- Agendamentos inteligentes
+- Processamento de dados em lote
+- Error handling robusto
 
-## 🚀 Deploy
+## 📊 Métricas e Analytics
 
-### Frontend (Lovable/Vercel)
-```bash
-# Build de produção
-npm run build
-
-# Deploy automático via Lovable
-# Ou manual: vercel --prod
-```
-
-### Backend (Heroku/Railway)
-```bash
-cd backend
-
-# Heroku
-heroku create ai-agents-backend
-heroku addons:create heroku-postgresql:hobby-dev
-heroku config:set NODE_ENV=production
-git push heroku main
-
-# Railway
-railway init
-railway add postgresql
-railway up
-```
-
-### Docker
-```bash
-cd backend
-docker-compose up -d
-```
-
-## 📈 Métricas e Analytics
-
-### Dashboards Disponíveis:
-- **Dashboard Admin**: Visão completa de todos os planos
-- **Dashboard Básico**: Métricas de atendimento 24/7
-- **Dashboard Pro**: Atendimento + prospecção ativa
-- **Dashboard Enterprise**: Analytics avançados
-
-### KPIs Monitorados:
-- **Total de leads** capturados
-- **Leads por período** (hoje, semana, mês)
-- **Taxa de conversão** (lead → agendamento)
+- **Taxa de conversão** lead → agendamento
 - **Tempo médio de resposta** por agente
 - **Horários mais requisitados**
-- **Demanda por dia da semana**
-- **Performance dos agentes** (success rate)
-- **Conversas ativas** em tempo real
+- **Performance dos agentes**
 - **Satisfação do cliente** (NPS)
 - **Distribuição por plano**
 - **Tendências de crescimento**
-- **Score de qualificação** dos leads
+- **ROI por canal**
 
-## 🧪 Testes
+## 🔐 Segurança
 
+- Autenticação JWT com refresh tokens
+- Rate limiting com exponential backoff
+- Validação de dados com Zod
+- Sanitização de inputs
+- CORS configurado
+- Logs de auditoria
+- Criptografia de senhas (bcrypt)
+
+## 🚀 Quick Start
+
+### Pré-requisitos
+- Node.js 18+
+- PostgreSQL 14+
+- Google Cloud Account
+- N8N Instance
+
+### Instalação
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/ai-agents-platform.git
+cd ai-agents-platform
+
 # Frontend
-npm run lint
-npm run build
+npm install
+cp .env.example .env
+npm run dev
 
 # Backend
 cd backend
-npm run dev
-curl http://localhost:3001/health
-curl -X POST http://localhost:3001/api/leads/capture/trigger
-```
-
-## 🤝 Como Editar
-
-### Via Lovable (Recomendado)
-1. Acesse o [Projeto Lovable](https://lovable.dev/projects/f1c67997-c6dc-48b5-ae89-8c37191c2001)
-2. Use prompts em linguagem natural
-3. Mudanças são commitadas automaticamente
-
-### Via IDE Local
-```bash
-git clone https://github.com/CaioMigueldeSaRodrigues/ai-assistpro.git
-cd ai-assistpro
 npm install
+cp .env.example .env
+npm run migrate
 npm run dev
 ```
 
-### Via GitHub Codespaces
-1. Clique em "Code" > "Codespaces" > "New codespace"
-2. Edite diretamente no browser
-3. Commit e push suas mudanças
+### Configuração
+1. Configure as variáveis de ambiente
+2. Execute as migrações do banco
+3. Configure as credenciais do Google Cloud
+4. Importe os workflows do N8N
+
+## 📁 Estrutura do Projeto
+
+```
+├── src/                    # Frontend React
+│   ├── components/         # Componentes reutilizáveis
+│   ├── pages/             # Páginas da aplicação
+│   ├── services/          # Serviços e APIs
+│   └── hooks/             # Custom hooks
+├── backend/               # Backend Node.js
+│   ├── src/
+│   │   ├── routes/        # Rotas da API
+│   │   ├── services/      # Lógica de negócio
+│   │   ├── db/           # Configuração do banco
+│   │   └── types/        # Tipos TypeScript
+├── public/               # Dashboards HTML
+├── docs/                # Documentação técnica
+├── n8n-workflows/       # Workflows de automação
+└── README.md           # Este arquivo
+```
+
+## 📖 Documentação
+
+Toda a documentação técnica está organizada no diretório `docs/`:
+
+- **[Configuração Completa](docs/GUIA-CONFIGURACAO-COMPLETO.md)** - Setup detalhado
+- **[Análise Backend + N8N](docs/ANALISE-BACKEND-N8N.md)** - Arquitetura técnica
+- **[Integração Completa](docs/INTEGRACAO-COMPLETA.md)** - React + HTML
+- **[Sistema de Login](docs/README-LOGIN.md)** - Autenticação
+- **[Dashboard Analytics](docs/DASHBOARD_ANALYTICS.md)** - Métricas
+- **[Melhorias Implementadas](docs/MELHORIAS-IMPLEMENTADAS.md)** - Changelog
+- **[Guia Rápido](docs/GUIA-RAPIDO.md)** - Como usar
 
 ## 🤝 Contribuição
 
 1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
 3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
 4. Push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
 
-## 📞 Suporte
-
-- **Documentação**: Ver arquivos `/backend/SETUP.md` e `/backend/README.md`
-- **Issues**: Abra uma issue no GitHub
-- **Lovable**: Use o editor visual para mudanças rápidas
-
 ## 📄 Licença
 
-© 2025 AI Agents Platform. Todos os direitos reservados.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📞 Suporte
+
+- **Documentação**: Consulte o diretório `docs/`
+- **Issues**: Abra uma issue no GitHub
+- **Email**: contato@aiagentsplatform.com
+
+---
+
+**Desenvolvido com ❤️ para revolucionar o atendimento automatizado**

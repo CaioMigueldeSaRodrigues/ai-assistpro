@@ -1,4 +1,4 @@
-# AI Agents Platform - Backend
+# AI Agents Platform - Backend API
 
 Backend Node.js/TypeScript para a plataforma de agentes de IA, adaptado do workflow n8n original.
 
