@@ -26,7 +26,11 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { useBotConfig, useSaveBotConfig, useTestBot } from "@/hooks/useBotConfig";
 
-export function BotConfiguration() {
+interface BotConfigurationProps {
+  planType?: 'basic' | 'pro' | 'enterprise';
+}
+
+export function BotConfiguration({ planType = 'basic' }: BotConfigurationProps) {
   const { data: botConfig, isLoading } = useBotConfig();
   const saveBotConfig = useSaveBotConfig();
   const testBot = useTestBot();

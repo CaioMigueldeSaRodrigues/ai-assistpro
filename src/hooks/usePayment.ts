@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { paymentApi } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
 
+interface PaymentResponse {
+  orderId: string;
+  status: string;
+  paymentLink?: string;
+}
+
 export function usePayment() {
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: paymentApi.processPayment,
-    onSuccess: (data) => {
+    onSuccess: (data: PaymentResponse) => {
       toast({
         title: 'Pagamento processado!',
         description: 'Redirecionando para confirmação...',
@@ -17,7 +23,7 @@ export function usePayment() {
       // Redirecionar para página de sucesso
       navigate(`/payment-success/${data.orderId}`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: 'Erro no pagamento',
         description: error.message || 'Tente novamente em alguns instantes',
