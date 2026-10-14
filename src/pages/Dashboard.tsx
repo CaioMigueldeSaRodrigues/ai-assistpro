@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { 
   BarChart3, 
@@ -20,12 +20,20 @@ import { useKPIMetrics } from "@/hooks/useKPIMetrics";
 import { TrafficAnalytics } from "@/components/TrafficAnalytics";
 import { BotConfiguration } from "@/components/BotConfiguration";
 import { MarketingInsights } from "@/components/MarketingInsights";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { user, isLoading: authLoading } = useAuth();
   const { data: metrics, isLoading } = useKPIMetrics();
   const [activeTab, setActiveTab] = useState("overview");
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!authLoading && !user) navigate('/login');
+  }, [authLoading, navigate, user]);
+
+  if (authLoading || isLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
@@ -39,7 +47,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <h1 className="text-3xl font-bold">Dashboard de {user.name}</h1>
             <p className="text-muted-foreground">Gerencie seus agentes de IA e analise performance</p>
           </div>
           <div className="flex items-center gap-2">

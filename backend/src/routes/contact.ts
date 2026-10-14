@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { ContactSchema } from '../types/index.js';
 import { db } from '../db/index.js';
+import { requireAdmin, requireAuth } from '../middleware/auth.js';
 
 export const contactRouter = Router();
 
@@ -26,7 +27,7 @@ contactRouter.post('/', async (req, res, next) => {
 });
 
 // Get all contacts (admin)
-contactRouter.get('/', async (req, res, next) => {
+contactRouter.get('/', requireAuth, requireAdmin, async (req, res, next) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 50;

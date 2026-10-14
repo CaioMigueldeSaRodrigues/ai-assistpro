@@ -1,5 +1,7 @@
 # 🤖 AI Agents Platform
 
+> **Status real do MVP:** o fluxo autenticado local está implementado na branch `autonomous/mvp`. Pagamentos e runtime de assistente são explicitamente sandbox/mock; integrações externas e páginas HTML legadas não representam produção. Consulte [docs/MVP.md](docs/MVP.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/SECURITY.md](docs/SECURITY.md) e [docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md).
+
 > Plataforma completa para venda e gestão de agentes de IA com captura automática de leads, sistema de assinaturas e analytics avançados.
 
 ## 🎯 Objetivo

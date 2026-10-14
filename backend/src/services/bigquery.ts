@@ -8,8 +8,10 @@ const bigquery = new BigQuery({
 
 export class BigQueryService {
   static async captureLeads(config: LeadCaptureConfig): Promise<Lead[]> {
+    const windowDays = Math.min(Math.max(Math.trunc(config.janela_de_dias), 1), 3650);
+    const resultLimit = Math.min(Math.max(Math.trunc(config.limite_registros), 1), 10000);
     const query = `
-      DECLARE start_date DATE DEFAULT DATE_SUB(CURRENT_DATE('America/Sao_Paulo'), INTERVAL ${config.janela_de_dias} DAY);
+      DECLARE start_date DATE DEFAULT DATE_SUB(CURRENT_DATE('America/Sao_Paulo'), INTERVAL @window_days DAY);
       DECLARE end_date   DATE DEFAULT CURRENT_DATE('America/Sao_Paulo');
 
       WITH src AS (
@@ -46,31 +48,43 @@ export class BigQueryService {
         cep_formatado, telefone1_formatado, telefone2_formatado, telefones
       FROM src
       WHERE data_inicio_atividade BETWEEN start_date AND end_date
-        AND cnae_fiscal_principal = '${config.cnae}'
-        ${config.uf_filtro ? `AND uf = '${config.uf_filtro}'` : ''}
+        AND cnae_fiscal_principal = @cnae
+        AND (@uf IS NULL OR uf = @uf)
       ORDER BY data_inicio_atividade DESC
-      LIMIT ${config.limite_registros};
+      LIMIT @result_limit;
     `;
 
-    const [job] = await bigquery.createQueryJob({ query });
+    const [job] = await bigquery.createQueryJob({
+      query,
+      params: {
+        window_days: windowDays,
+        cnae: config.cnae,
+        uf: config.uf_filtro ?? null,
+        result_limit: resultLimit,
+      },
+    });
     const [rows] = await job.getQueryResults();
     
     return rows as Lead[];
   }
 
   static async getLeadStats(cnae: string, days: number = 30) {
+    const windowDays = Math.min(Math.max(Math.trunc(days), 1), 3650);
     const query = `
       SELECT
         COUNT(*) as total_leads,
         COUNT(DISTINCT uf) as states_count,
         COUNT(DISTINCT municipio) as cities_count
       FROM \`basedosdados.br_me_cnpj.estabelecimentos\` e
-      WHERE CAST(e.cnae_fiscal_principal AS STRING) = '${cnae}'
+      WHERE CAST(e.cnae_fiscal_principal AS STRING) = @cnae
         AND SAFE.PARSE_DATE('%Y-%m-%d', CAST(e.data_inicio_atividade AS STRING)) 
-            >= DATE_SUB(CURRENT_DATE(), INTERVAL ${days} DAY)
+            >= DATE_SUB(CURRENT_DATE(), INTERVAL @window_days DAY)
     `;
 
-    const [job] = await bigquery.createQueryJob({ query });
+    const [job] = await bigquery.createQueryJob({
+      query,
+      params: { cnae, window_days: windowDays },
+    });
     const [rows] = await job.getQueryResults();
     
     return rows[0];

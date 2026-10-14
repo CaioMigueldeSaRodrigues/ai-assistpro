@@ -1,5 +1,7 @@
 # 📚 Documentação - AI Agents Platform
 
+> Nota de auditoria: os documentos históricos descrevem intenção, demos e integrações planejadas. Para o estado executável do MVP, use [MVP.md](MVP.md), [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md) e [KNOWN-LIMITATIONS.md](KNOWN-LIMITATIONS.md).
+
 > Documentação técnica completa do processo de desenvolvimento
 
 ## 📋 Índice da Documentação

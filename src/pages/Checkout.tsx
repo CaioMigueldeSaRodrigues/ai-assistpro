@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { usePayment } from "@/hooks/usePayment";
 import { PaymentMethod } from "@/components/PaymentMethod";
 import { PIXPayment } from "@/components/PIXPayment";
+import { useAuth } from "@/hooks/useAuth";
 
 const plans = {
   basic: {
@@ -68,6 +69,7 @@ export default function Checkout() {
   const { planId } = useParams<{ planId: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user, isLoading: authLoading } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState<'credit' | 'pix'>('credit');
   const [customerData, setCustomerData] = useState({
     name: '',
@@ -79,6 +81,15 @@ export default function Checkout() {
 
   const plan = plans[planId as keyof typeof plans];
   const payment = usePayment();
+
+  useEffect(() => {
+    if (!authLoading && !user) navigate('/login');
+    if (user) setCustomerData((current) => ({ ...current, name: current.name || user.name, email: current.email || user.email }));
+  }, [authLoading, navigate, user]);
+
+  if (authLoading || !user) {
+    return <div className="min-h-screen flex items-center justify-center">Carregando sessão...</div>;
+  }
 
   if (!plan) {
     return (
@@ -95,12 +106,12 @@ export default function Checkout() {
     setCustomerData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handlePayment = async (paymentData: any) => {
+  const handlePayment = async (paymentData: Record<string, unknown>) => {
     const orderData = {
       plan: planId,
       customer: customerData,
       payment: {
-        method: paymentMethod,
+        method: paymentMethod === 'credit' ? 'credit_card' : 'pix',
         ...paymentData
       },
       amount: plan.price
@@ -317,8 +328,7 @@ export default function Checkout() {
                 <div className="text-sm">
                   <p className="font-medium mb-1">Seus dados estão seguros</p>
                   <p className="text-muted-foreground">
-                    Utilizamos criptografia SSL de 256 bits e não armazenamos dados do cartão.
-                    Processamento via Stripe e Mercado Pago.
+                    Este fluxo usa exclusivamente o adaptador MOCK_SANDBOX local. Nenhum pagamento real é processado.
                   </p>
                 </div>
               </div>

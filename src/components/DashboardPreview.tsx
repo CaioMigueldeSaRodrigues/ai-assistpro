@@ -24,7 +24,6 @@ const dashboards = [
     description: 'Acesso completo a todos os planos e métricas globais',
     features: ['Visualização de todos os planos', 'Métricas consolidadas', 'Controle total'],
     color: 'bg-red-500',
-    email: 'adm@adm.com',
     badge: 'Admin'
   },
   {
@@ -34,7 +33,6 @@ const dashboards = [
     description: 'Atendimento 24/7 com assistente virtual inteligente',
     features: ['Até 1.000 conversas/mês', 'WhatsApp + Site', 'Suporte por email'],
     color: 'bg-blue-500',
-    email: 'basico@demo.com',
     badge: 'Básico'
   },
   {
@@ -44,7 +42,6 @@ const dashboards = [
     description: 'Atendimento + Prospecção ativa de leads qualificados',
     features: ['Até 5.000 conversas/mês', 'Agente de prospecção', 'Integração CRM'],
     color: 'bg-purple-500',
-    email: 'pro@demo.com',
     badge: 'Pro'
   },
   {
@@ -54,7 +51,6 @@ const dashboards = [
     description: 'Analytics avançados e suporte dedicado 24/7',
     features: ['Conversas ilimitadas', 'Analytics avançados', 'Suporte dedicado'],
     color: 'bg-orange-500',
-    email: 'enterprise@demo.com',
     badge: 'Enterprise'
   }
 ];
@@ -62,9 +58,7 @@ const dashboards = [
 export const DashboardPreview = () => {
   const navigate = useNavigate();
 
-  const handleDashboardAccess = (email: string) => {
-    // Preencher email no localStorage para auto-preenchimento
-    localStorage.setItem('prefilledEmail', email);
+  const handleDashboardAccess = () => {
     navigate('/login');
   };
 
@@ -126,7 +120,7 @@ export const DashboardPreview = () => {
                       ))}
                     </ul>
                     <Button 
-                      onClick={() => handleDashboardAccess(dashboard.email)}
+                      onClick={handleDashboardAccess}
                       className="w-full group"
                       variant="outline"
                     >
@@ -135,7 +129,7 @@ export const DashboardPreview = () => {
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                     <p className="text-xs text-muted-foreground text-center mt-2">
-                      {dashboard.email} / 1234
+                      Acesso protegido por conta real
                     </p>
                   </CardContent>
                 </Card>
@@ -171,7 +165,7 @@ export const DashboardPreview = () => {
                 </Button>
                 <Button 
                   variant="outline"
-                  onClick={() => handleDashboardAccess('adm@adm.com')}
+                  onClick={handleDashboardAccess}
                 >
                   <Crown className="mr-2 h-4 w-4" />
                   Acesso Admin Direto

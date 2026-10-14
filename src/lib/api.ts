@@ -10,6 +10,7 @@ export class ApiError extends Error {
 async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...options?.headers,
@@ -39,7 +40,20 @@ export const subscriptionsApi = {
     body: JSON.stringify(data),
   }),
 
-  getByEmail: (email: string) => fetchApi(`/subscriptions/${email}`),
+  getCurrent: () => fetchApi('/subscriptions/current'),
+};
+
+export const authApi = {
+  register: (data: { name: string; email: string; password: string; plan?: 'basic' | 'pro' | 'enterprise' }) =>
+    fetchApi<{ user: { id: number; name: string; email: string; plan: string } }>('/auth/register', {
+      method: 'POST', body: JSON.stringify(data),
+    }),
+  login: (data: { email: string; password: string }) =>
+    fetchApi<{ user: { id: number; name: string; email: string; plan: string } }>('/auth/login', {
+      method: 'POST', body: JSON.stringify(data),
+    }),
+  me: () => fetchApi<{ user: { id: number; name: string; email: string; plan: string } }>('/auth/me'),
+  logout: () => fetchApi('/auth/logout', { method: 'POST' }),
 };
 
 // Contact
@@ -86,20 +100,19 @@ export const leadsApi = {
 
 // Bot Configuration
 export const botApi = {
-  getConfig: (userId: string) => fetchApi(`/bot/config/${userId}`),
+  getConfig: () => fetchApi('/bot/config'),
   
-  saveConfig: (userId: string, config: any) => fetchApi(`/bot/config/${userId}`, {
+  saveConfig: (config: unknown) => fetchApi('/bot/config', {
     method: 'POST',
     body: JSON.stringify(config),
   }),
   
-  testBot: (userId: string, message: string) => fetchApi(`/bot/test/${userId}`, {
+  testBot: (message: string) => fetchApi<{ botResponse: string }>('/bot/test', {
     method: 'POST',
     body: JSON.stringify({ message }),
   }),
   
-  getAnalytics: (userId: string, days: number = 7) => 
-    fetchApi(`/bot/analytics/${userId}?days=${days}`),
+  getAnalytics: (days: number = 7) => fetchApi(`/bot/analytics?days=${days}`),
 };
 
 // Payment
@@ -115,7 +128,7 @@ export const paymentApi = {
     };
     payment: {
       method: 'credit_card' | 'pix';
-      card?: any;
+      card?: Record<string, string>;
       pixKey?: string;
       qrCode?: string;
     };
@@ -127,7 +140,7 @@ export const paymentApi = {
 
   getOrder: (orderId: string) => fetchApi(`/payments/orders/${orderId}`),
 
-  generatePIX: (data: { amount: number; customer: any }) => 
+  generatePIX: (data: { amount: number; customer: Record<string, unknown> }) =>
     fetchApi('/payments/pix/generate', {
       method: 'POST',
       body: JSON.stringify(data),

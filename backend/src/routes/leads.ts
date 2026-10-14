@@ -6,6 +6,19 @@ import { LeadSchema } from '../types/index.js';
 
 export const leadsRouter = Router();
 
+// Get lead statistics
+leadsRouter.get('/stats/:cnae', async (req, res, next) => {
+  try {
+    const { cnae } = req.params;
+    const days = parseInt(req.query.days as string) || 30;
+
+    const stats = await BigQueryService.getLeadStats(cnae, days);
+    res.json(stats);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get lead by CNPJ
 leadsRouter.get('/:cnpj', async (req, res, next) => {
   try {
@@ -17,19 +30,6 @@ leadsRouter.get('/:cnpj', async (req, res, next) => {
     }
     
     res.json(lead);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get lead statistics
-leadsRouter.get('/stats/:cnae', async (req, res, next) => {
-  try {
-    const { cnae } = req.params;
-    const days = parseInt(req.query.days as string) || 30;
-    
-    const stats = await BigQueryService.getLeadStats(cnae, days);
-    res.json(stats);
   } catch (error) {
     next(error);
   }
