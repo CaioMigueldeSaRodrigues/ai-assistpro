@@ -7,29 +7,56 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+const stateChangingMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
-// Middleware
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
-app.use(express.json());
+function csrfGuard(configuredOrigin: string) {
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (!stateChangingMethods.has(req.method) || !req.path.startsWith('/api/')) return next();
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+    const origin = req.header('origin');
+    const referer = req.header('referer');
+    const source = origin || referer;
+    if (!source) return next();
 
-// Setup routes
-setupRoutes(app);
+    try {
+      const sourceOrigin = new URL(source).origin;
+      if (sourceOrigin !== configuredOrigin) {
+        return res.status(403).json({ error: 'Cross-site request rejected' });
+      }
+    } catch {
+      return res.status(403).json({ error: 'Invalid request origin' });
+    }
 
-// Error handler
-app.use(errorHandler);
+    return next();
+  };
+}
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  
-  // Setup cron jobs
-  setupCronJobs();
-});
+export function createApp() {
+  const app = express();
+  const configuredOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
+
+  app.disable('x-powered-by');
+  app.use(cors({ origin: configuredOrigin, credentials: true }));
+  app.use(express.json({ limit: '256kb' }));
+  app.use(csrfGuard(configuredOrigin));
+
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok', service: 'ai-assistpro-backend', timestamp: new Date().toISOString() });
+  });
+
+  setupRoutes(app);
+  app.use(errorHandler);
+  return app;
+}
+
+export function startServer() {
+  const port = Number(process.env.PORT || 3001);
+  const app = createApp();
+  return app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    setupCronJobs();
+  });
+}
+
+if (process.env.NODE_ENV !== 'test') startServer();

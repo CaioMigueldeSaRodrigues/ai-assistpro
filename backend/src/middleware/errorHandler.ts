@@ -7,10 +7,9 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  console.error('Error:', error);
-
   // Zod validation errors
   if (error instanceof ZodError) {
+    console.warn('Request validation failed');
     return res.status(400).json({
       error: 'Validation error',
       details: error.errors.map(e => ({
@@ -20,6 +19,7 @@ export function errorHandler(
     });
   }
 
+  console.error('Unhandled request error:', error.message);
   // Default error
   res.status(500).json({
     error: 'Internal server error',

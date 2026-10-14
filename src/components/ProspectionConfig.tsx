@@ -290,8 +290,10 @@ export function ProspectionConfig() {
 
             {config.prospectionHours.enabled && (
               <div className="space-y-3">
-                {Object.entries(config.prospectionHours).map(([day, hours]: [string, any]) => {
+                {Object.entries(config.prospectionHours).map(([day, hours]) => {
                   if (day === 'enabled') return null;
+
+                  const schedule = hours as { start: string; end: string; enabled: boolean };
                   
                   const dayNames: Record<string, string> = {
                     monday: 'Segunda-feira',
@@ -307,30 +309,30 @@ export function ProspectionConfig() {
                     <div key={day} className="flex items-center gap-4">
                       <div className="w-24">
                         <Switch
-                          checked={hours?.enabled || false}
+                          checked={schedule.enabled}
                           onCheckedChange={(checked) => 
                             setConfig({
                               ...config,
                               prospectionHours: {
                                 ...config.prospectionHours,
-                                [day]: {...(hours || {}), enabled: checked}
+                                 [day]: {...schedule, enabled: checked}
                               }
                             })
                           }
                         />
                       </div>
                       <div className="w-32 text-sm">{dayNames[day] || day}</div>
-                      {hours?.enabled && (
+                      {schedule.enabled && (
                         <>
                           <Input
                             type="time"
-                            value={hours?.start || '09:00'}
+                            value={schedule.start || '09:00'}
                             onChange={(e) => 
                               setConfig({
                                 ...config,
                                 prospectionHours: {
                                   ...config.prospectionHours,
-                                  [day]: {...(hours || {}), start: e.target.value}
+                                   [day]: {...schedule, start: e.target.value}
                                 }
                               })
                             }
@@ -339,13 +341,13 @@ export function ProspectionConfig() {
                           <span className="text-muted-foreground">às</span>
                           <Input
                             type="time"
-                            value={hours?.end || '17:00'}
+                            value={schedule.end || '17:00'}
                             onChange={(e) => 
                               setConfig({
                                 ...config,
                                 prospectionHours: {
                                   ...config.prospectionHours,
-                                  [day]: {...(hours || {}), end: e.target.value}
+                                   [day]: {...schedule, end: e.target.value}
                                 }
                               })
                             }

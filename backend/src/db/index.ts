@@ -1,4 +1,7 @@
 import pg from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const { Pool } = pg;
 
@@ -7,7 +10,7 @@ export const db = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
-db.on('error', (err) => {
+db.on('error', (err: Error) => {
   console.error('Unexpected database error:', err);
 });
 

@@ -10,10 +10,10 @@ subscriptionsRouter.post('/', async (req, res, next) => {
     const data = SubscriptionSchema.parse(req.body);
     
     const result = await db.query(
-      `INSERT INTO subscriptions (email, name, company, phone, plan, cnae, message, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+      `INSERT INTO subscriptions (user_id, email, name, company, phone, plan, cnae, message, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
        RETURNING *`,
-      [data.email, data.name, data.company, data.phone, data.plan, data.cnae, data.message]
+      [req.user!.id, req.user!.email, req.user!.name, data.company, data.phone, data.plan, data.cnae, data.message]
     );
     
     res.status(201).json({
@@ -26,13 +26,11 @@ subscriptionsRouter.post('/', async (req, res, next) => {
 });
 
 // Get subscription by email
-subscriptionsRouter.get('/:email', async (req, res, next) => {
+subscriptionsRouter.get('/current', async (req, res, next) => {
   try {
-    const { email } = req.params;
-    
     const result = await db.query(
-      'SELECT * FROM subscriptions WHERE email = $1 ORDER BY created_at DESC LIMIT 1',
-      [email]
+      'SELECT * FROM subscriptions WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
+      [req.user!.id]
     );
     
     if (result.rows.length === 0) {
@@ -48,6 +46,7 @@ subscriptionsRouter.get('/:email', async (req, res, next) => {
 // Get all subscriptions (admin)
 subscriptionsRouter.get('/', async (req, res, next) => {
   try {
+    if (req.user!.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 50;
     const offset = (page - 1) * limit;

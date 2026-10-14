@@ -38,6 +38,9 @@ interface AgentPerformance {
   success_rate: number;
 }
 
+type JsonValue = string | number | boolean | null | JsonObject | JsonValue[];
+type JsonObject = { [key: string]: JsonValue };
+
 export class AnalyticsService {
   private pool: Pool;
 
@@ -113,8 +116,8 @@ export class AnalyticsService {
    */
   async trackEvent(
     eventType: string,
-    eventData: Record<string, any>,
-    userId?: string,
+    eventData: JsonObject,
+    userId?: number,
     sessionId?: string
   ): Promise<void> {
     await this.pool.query(`
@@ -132,7 +135,7 @@ export class AnalyticsService {
     responseTimeMs: number,
     success: boolean,
     errorMessage?: string,
-    metadata?: Record<string, any>
+    metadata?: JsonObject
   ): Promise<void> {
     await this.pool.query(`
       INSERT INTO agent_performance 
@@ -283,7 +286,7 @@ export class AnalyticsService {
   /**
    * Obtém estatísticas em tempo real
    */
-  async getRealTimeStats(): Promise<Record<string, any>> {
+  async getRealTimeStats(): Promise<Record<string, unknown>> {
     const [
       activeUsers,
       todayEvents,
@@ -370,7 +373,7 @@ export class AnalyticsService {
   /**
    * Gera relatório consolidado
    */
-  async generateReport(startDate: string, endDate: string): Promise<Record<string, any>> {
+  async generateReport(startDate: string, endDate: string): Promise<Record<string, unknown>> {
     const [
       conversionMetrics,
       popularSlots,

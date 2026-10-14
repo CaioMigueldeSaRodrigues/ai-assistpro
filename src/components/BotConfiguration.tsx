@@ -93,7 +93,7 @@ export function BotConfiguration({ planType = 'basic' }: BotConfigurationProps) 
   // Load config when data is available
   useEffect(() => {
     if (botConfig) {
-      setConfig(botConfig as any);
+      setConfig(botConfig as typeof config);
     }
   }, [botConfig]);
 
@@ -112,7 +112,7 @@ export function BotConfiguration({ planType = 'basic' }: BotConfigurationProps) 
     }
 
     testBot.mutate(testMessage, {
-      onSuccess: (response: any) => {
+      onSuccess: (response: { botResponse: string }) => {
         setTestResponse(response.botResponse);
         setIsTestMode(true);
       }
@@ -296,8 +296,10 @@ export function BotConfiguration({ planType = 'basic' }: BotConfigurationProps) 
 
               {config.workingHours.enabled && (
                 <div className="space-y-3">
-                  {Object.entries(config.workingHours).map(([day, hours]: [string, any]) => {
+                  {Object.entries(config.workingHours).map(([day, hours]) => {
                     if (day === 'enabled' || day === 'timezone') return null;
+
+                    const schedule = hours as { start: string; end: string; enabled: boolean };
                     
                     const dayNames: Record<string, string> = {
                       monday: 'Segunda-feira',
@@ -313,30 +315,30 @@ export function BotConfiguration({ planType = 'basic' }: BotConfigurationProps) 
                       <div key={day} className="flex items-center gap-4">
                         <div className="w-24">
                           <Switch
-                            checked={hours?.enabled || false}
+                            checked={schedule.enabled}
                             onCheckedChange={(checked) => 
                               setConfig({
                                 ...config,
                                 workingHours: {
                                   ...config.workingHours,
-                                  [day]: {...(hours || {}), enabled: checked}
+                                   [day]: {...schedule, enabled: checked}
                                 }
                               })
                             }
                           />
                         </div>
                         <div className="w-32 text-sm">{dayNames[day] || day}</div>
-                        {hours?.enabled && (
+                        {schedule.enabled && (
                           <>
                             <Input
                               type="time"
-                              value={hours?.start || '09:00'}
+                              value={schedule.start || '09:00'}
                               onChange={(e) => 
                                 setConfig({
                                   ...config,
                                   workingHours: {
                                     ...config.workingHours,
-                                    [day]: {...(hours || {}), start: e.target.value}
+                                     [day]: {...schedule, start: e.target.value}
                                   }
                                 })
                               }
@@ -345,13 +347,13 @@ export function BotConfiguration({ planType = 'basic' }: BotConfigurationProps) 
                             <span className="text-muted-foreground">às</span>
                             <Input
                               type="time"
-                              value={hours?.end || '18:00'}
+                              value={schedule.end || '18:00'}
                               onChange={(e) => 
                                 setConfig({
                                   ...config,
                                   workingHours: {
                                     ...config.workingHours,
-                                    [day]: {...(hours || {}), end: e.target.value}
+                                     [day]: {...schedule, end: e.target.value}
                                   }
                                 })
                               }

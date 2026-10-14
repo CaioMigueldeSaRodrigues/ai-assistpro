@@ -1,8 +1,12 @@
 // Google Analytics 4 Integration
+type AnalyticsParameters = Record<string, unknown>;
+
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
+    fbq?: (command: string, ...args: unknown[]) => void;
+    hj?: (command: string, ...args: unknown[]) => void;
   }
 }
 
@@ -26,8 +30,8 @@ class AnalyticsService {
 
     // Initialize dataLayer and gtag
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function() {
-      window.dataLayer.push(arguments);
+    window.gtag = (...args: unknown[]) => {
+      window.dataLayer.push(args);
     };
 
     window.gtag('js', new Date());
@@ -180,10 +184,10 @@ class FacebookPixelService {
     this.isInitialized = true;
   }
 
-  track(event: string, parameters?: any) {
+  track(event: string, parameters?: AnalyticsParameters) {
     if (!this.isInitialized || typeof window === 'undefined') return;
     
-    (window as any).fbq('track', event, parameters);
+    window.fbq?.('track', event, parameters);
   }
 
   trackPurchase(value: number, currency: string = 'BRL') {
@@ -238,14 +242,14 @@ class HeatmapService {
   trigger(eventName: string) {
     if (!this.isInitialized || typeof window === 'undefined') return;
     
-    (window as any).hj('trigger', eventName);
+    window.hj?.('trigger', eventName);
   }
 
   // Identify user
-  identify(userId: string, attributes?: any) {
+  identify(userId: string, attributes?: AnalyticsParameters) {
     if (!this.isInitialized || typeof window === 'undefined') return;
     
-    (window as any).hj('identify', userId, attributes);
+    window.hj?.('identify', userId, attributes);
   }
 }
 
@@ -264,7 +268,7 @@ export function initializeAnalytics() {
 // Custom analytics for our platform
 export const platformAnalytics = {
   // Track user journey
-  trackUserJourney(step: string, metadata?: any) {
+  trackUserJourney(step: string, metadata?: AnalyticsParameters) {
     analytics.trackEvent('user_journey', 'navigation', step);
     
     // Store in localStorage for funnel analysis

@@ -2,20 +2,20 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { botApi } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
 
-export function useBotConfig(userId: string = 'demo-user') {
+export function useBotConfig() {
   return useQuery({
-    queryKey: ['bot-config', userId],
-    queryFn: () => botApi.getConfig(userId),
+    queryKey: ['bot-config'],
+    queryFn: botApi.getConfig,
   });
 }
 
-export function useSaveBotConfig(userId: string = 'demo-user') {
+export function useSaveBotConfig() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (config: any) => botApi.saveConfig(userId, config),
+    mutationFn: (config: unknown) => botApi.saveConfig(config),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bot-config', userId] });
+      queryClient.invalidateQueries({ queryKey: ['bot-config'] });
       toast({
         title: 'Configurações salvas!',
         description: 'Seu assistente virtual foi atualizado com sucesso.',
@@ -31,9 +31,9 @@ export function useSaveBotConfig(userId: string = 'demo-user') {
   });
 }
 
-export function useTestBot(userId: string = 'demo-user') {
+export function useTestBot() {
   return useMutation({
-    mutationFn: (message: string) => botApi.testBot(userId, message),
+    mutationFn: (message: string) => botApi.testBot(message),
     onError: (error: Error) => {
       toast({
         title: 'Erro ao testar bot',
@@ -44,10 +44,10 @@ export function useTestBot(userId: string = 'demo-user') {
   });
 }
 
-export function useBotAnalytics(userId: string = 'demo-user', days: number = 7) {
+export function useBotAnalytics(days: number = 7) {
   return useQuery({
-    queryKey: ['bot-analytics', userId, days],
-    queryFn: () => botApi.getAnalytics(userId, days),
+    queryKey: ['bot-analytics', days],
+    queryFn: () => botApi.getAnalytics(days),
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 }
